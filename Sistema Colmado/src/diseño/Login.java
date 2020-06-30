@@ -1,6 +1,5 @@
 package diseño;
 
-import java.awt.Graphics;
 import java.awt.Image;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -52,7 +51,10 @@ public class Login extends javax.swing.JFrame {
         getContentPane().add(txt_password, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 380, 250, 30));
 
         logo.setBackground(new java.awt.Color(255, 255, 255));
-        getContentPane().add(logo, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 20, 300, 300));
+        logo.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        logo.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
+        logo.setIconTextGap(10);
+        getContentPane().add(logo, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 20, 350, 300));
 
         jButton1.setBackground(new java.awt.Color(255, 106, 6));
         jButton1.setFont(new java.awt.Font("Verdana", 1, 16)); // NOI18N
@@ -95,9 +97,6 @@ public class Login extends javax.swing.JFrame {
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-
-        //</editor-fold>
         java.awt.EventQueue.invokeLater(() -> {
             new Login().setVisible(true);
         });
