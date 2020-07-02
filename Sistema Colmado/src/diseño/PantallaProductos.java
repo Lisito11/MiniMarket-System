@@ -107,6 +107,11 @@ public class PantallaProductos extends javax.swing.JFrame {
         btn_atras.setForeground(new java.awt.Color(255, 255, 255));
         btn_atras.setText("Atras");
         btn_atras.setFocusPainted(false);
+        btn_atras.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_atrasActionPerformed(evt);
+            }
+        });
         getContentPane().add(btn_atras, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 10, -1, -1));
 
         rbtn_ordenarCategoria.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
@@ -156,6 +161,10 @@ public class PantallaProductos extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btn_atrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_atrasActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_atrasActionPerformed
 
     public static void main(String args[]) {
         try {
