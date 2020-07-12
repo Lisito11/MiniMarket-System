@@ -1,6 +1,7 @@
 package vista;
 
 import bd_logica.Venta;
+import java.awt.event.ActionEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
@@ -71,6 +72,16 @@ public class PantallaVentas extends javax.swing.JFrame {
             jTable1.getColumnModel().getColumn(4).setResizable(false);
         }
 
+        buttonGroup1.add(jRadioButton1);
+        buttonGroup1.add(jRadioButton2);
+        buttonGroup1.add(jRadioButton3);
+        buttonGroup1.add(jRadioButton4);
+
+        jRadioButton2.addActionListener(this::ordernarPor);
+        jRadioButton1.addActionListener(this::ordernarPor);
+        jRadioButton3.addActionListener(this::ordernarPor);
+        jRadioButton4.addActionListener(this::ordernarPor);
+
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 60, 560, 350));
 
         jLabel1.setFont(new java.awt.Font("Verdana", 1, 18)); // NOI18N
@@ -117,11 +128,7 @@ public class PantallaVentas extends javax.swing.JFrame {
         jButton4.setForeground(new java.awt.Color(255, 255, 255));
         jButton4.setText("Exportar una Venta");
         jButton4.setFocusPainted(false);
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
-            }
-        });
+        jButton4.addActionListener(this::jButton4ActionPerformed);
         getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 420, -1, -1));
 
         jLabel3.setForeground(new java.awt.Color(204, 204, 204));
@@ -131,11 +138,6 @@ public class PantallaVentas extends javax.swing.JFrame {
         jRadioButton1.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jRadioButton1.setForeground(new java.awt.Color(255, 255, 255));
         jRadioButton1.setText("Por Costo Venta");
-        jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton1ActionPerformed(evt);
-            }
-        });
         getContentPane().add(jRadioButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 110, -1, 30));
 
         jRadioButton2.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
@@ -153,17 +155,15 @@ public class PantallaVentas extends javax.swing.JFrame {
         jButton5.setForeground(new java.awt.Color(255, 255, 255));
         jButton5.setText("Buscar");
         jButton5.setFocusPainted(false);
+                jButton5.addActionListener(this::buscarPorFecha);
+
         getContentPane().add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 480, -1, -1));
 
         jTextField1.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         getContentPane().add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 480, 190, 30));
 
         jcmbox_topProductos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Item 1", "Item 2", "Item 3", "Item 4"}));
-        jcmbox_topProductos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jcmbox_topProductosActionPerformed(evt);
-            }
-        });
+        jcmbox_topProductos.addActionListener(this::jcmbox_topProductosActionPerformed);
         getContentPane().add(jcmbox_topProductos, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 250, 140, -1));
 
         jLabel4.setFont(new java.awt.Font("Verdana", 1, 16)); // NOI18N
@@ -214,7 +214,7 @@ public class PantallaVentas extends javax.swing.JFrame {
     }//GEN-LAST:event_jcmbox_topProductosActionPerformed
 
     private void btn_agregarVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_agregarVentaActionPerformed
-        int input = JOptionPane.showConfirmDialog(null, "¿Desea agregar una venta?","Agregar Venta", YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+        int input = JOptionPane.showConfirmDialog(null, "¿Desea agregar una venta?", "Agregar Venta", YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         if (input == 0) {
             setVisible(false);
             FormVenta.iniciar();
@@ -283,7 +283,72 @@ public class PantallaVentas extends javax.swing.JFrame {
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JComboBox<String> jcmbox_topProductos;
-
     public DefaultTableModel dtm;
 
+    //Consulta para vaciar los datos de la tabla
+    private void limpiarTabla() {
+        int a = dtm.getRowCount() - 1;
+        for (int i = a; i >= 0; i--) {
+            dtm.removeRow(i);
+        }
+    }
+
+    private void filtrarBusqueda(String filtro) {
+        Venta v = new Venta();
+        ResultSet rs = v.getTable(filtro);
+        try {
+            while (rs.next()) {
+                dtm.addRow(new Object[]{rs.getString("id_venta"), rs.getString("fecha_venta"), rs.getString("costo_venta"), rs.getString("ganancia_venta"), rs.getString("total_venta")});
+            }
+        } catch (SQLException c) {
+        }
+    }
+    //Filtrado de busquedas
+
+    // Ordenar por fecha
+    private void ordernarPor(ActionEvent e) {
+        
+        // Ordenar por fecha
+        if (jRadioButton2.isSelected() == true) {
+            limpiarTabla();
+
+            filtrarBusqueda("SELECT * from venta order by fecha_venta ASC");
+        }
+        
+        // Ordenar por costo de la venta
+        if (jRadioButton1.isSelected() == true) {
+            limpiarTabla();
+
+            filtrarBusqueda("SELECT * from venta order by costo_venta DESC");
+        }
+        
+        // Ordenar por ganancia de la venta
+        if (jRadioButton3.isSelected() == true) {
+            limpiarTabla();
+
+            filtrarBusqueda("SELECT * from venta order by ganancia_venta DESC");
+        }
+        
+        // Ordenar por total de la venta
+        if (jRadioButton4.isSelected() == true) {
+            limpiarTabla();
+
+            filtrarBusqueda("SELECT * from venta order by total_venta DESC");
+        }
+    } 
+    
+    
+    
+    private void buscarPorFecha(ActionEvent e){
+        String busqueda = jTextField1.getText();
+        System.out.println(busqueda);
+        
+        JOptionPane.showMessageDialog(null, busqueda, "Venta", JOptionPane.INFORMATION_MESSAGE);
+        
+        
+        
+        
+        jTextField1.setText("");
+    }
+    
 }
