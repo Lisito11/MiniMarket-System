@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="473f6f0c-2d95-427c-b848-9c49e32c7b6d">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true" pdfFontName="Times-Bold"/>
+	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<style name="Row" mode="Transparent">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style backcolor="#E6DAC3"/>
+		</conditionalStyle>
+	</style>
+	<queryString language="SQL">
+		<![CDATA[select * from venta]]>
+	</queryString>
+	<field name="id_venta" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="id_administrador" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="fecha_venta" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="total_venta" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="costo_venta" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ganancia_venta" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<title>
+		<band height="154" splitType="Stretch">
+			<image>
+				<reportElement x="0" y="0" width="221" height="152" uuid="53e2d953-5f07-4ffc-bb36-385e6373aee3"/>
+				<imageExpression><![CDATA["C:\\Users\\NBA\\Desktop\\COLMADO\\MiniMarket-System\\Sistema Colmado\\src\\imagenes\\logo.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="157" y="79" width="75" height="20" uuid="a05055e6-f5c1-4fc0-9319-79a9b9499efe"/>
+				<textElement>
+					<font fontName="Verdana" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[El Viejillo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="157" y="99" width="155" height="20" uuid="c9e7f71d-5808-44ff-a8ed-7f46c96f12d6"/>
+				<textElement>
+					<font fontName="Verdana" size="12"/>
+				</textElement>
+				<text><![CDATA[Colmado & Cafeteria]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="157" y="119" width="100" height="20" uuid="e105e6a9-b3e3-49a4-9ceb-610940043386"/>
+				<textElement>
+					<font fontName="Verdana"/>
+				</textElement>
+				<text><![CDATA[809-988-9305]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="435" y="3" width="80" height="20" uuid="e3a72c3b-8fb3-4f73-984b-22df72229f62"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="515" y="3" width="40" height="20" uuid="da278c8b-bd95-41c6-8267-414f72690536"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="414" y="23" width="141" height="20" uuid="82a3c993-b583-4ca2-a727-08ac9c232595"/>
+				<textElement>
+					<font fontName="Verdana" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="352" y="96" width="181" height="23" uuid="c3659a21-9a30-42b1-8154-b23a5cb61b26"/>
+				<textElement>
+					<font fontName="Verdana" size="18"/>
+				</textElement>
+				<text><![CDATA[Reporte de Ventas]]></text>
+			</staticText>
+		</band>
+	</title>
+</jasperReport>

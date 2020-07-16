@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9fc13192-e0d5-4d32-a3db-9bc343c688dd">
+	<property name="ireport.zoom" value="1.771561000000001"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true" pdfFontName="Times-Bold"/>
+	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<style name="Row" mode="Transparent">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style backcolor="#E6DAC3"/>
+		</conditionalStyle>
+	</style>
+	<style name="Crosstab Data Text" hAlign="Center"/>
+	<parameter name="id_venta" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\NBA\\Desktop\\COLMADO\\MiniMarket-System\\Sistema Colmado\\src\\reportes\\"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select dv.id_venta, dv.id_producto, p.nombre, sum(dv.cantidad) as Cantidad, sum(p.precioVenta * dv.cantidad) as total_vendido from detalle_venta dv inner join producto p on dv.id_producto = p.id_producto where dv.id_venta = $P!{id_venta} GROUP by dv.id_producto]]>
+	</queryString>
+	<field name="id_venta" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="id_producto" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nombre" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Cantidad" class="java.math.BigDecimal"/>
+	<field name="total_vendido" class="java.math.BigDecimal"/>
+	<title>
+		<band height="136" splitType="Stretch">
+			<subreport>
+				<reportElement x="0" y="0" width="555" height="136" uuid="53a056b5-a6c3-4f0d-ba0d-4edb8e7df7f3"/>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "header.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="27" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="1" width="556" height="17" uuid="e8c984bc-630b-4020-9a39-4e762a1f0db0"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement style="Column header" x="1" y="2" width="77" height="15" forecolor="#FF3300" uuid="4fab8648-c1f1-49cb-acf9-09824d1beaf2"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[ID Producto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="138" y="2" width="116" height="15" forecolor="#FF3300" uuid="85f36e7d-8907-4adb-9506-96f25b363f01"/>
+				<text><![CDATA[Nombre]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="276" y="2" width="138" height="15" forecolor="#FF3300" uuid="bffe391d-bbae-4fca-b433-39b3d42eace5"/>
+				<text><![CDATA[Cantidad]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="414" y="2" width="138" height="15" forecolor="#FF0000" uuid="f553f0f6-83d0-48bc-bc2b-fc42fecb4c5e"/>
+				<text><![CDATA[Total vendido]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="22" splitType="Stretch">
+			<rectangle>
+				<reportElement style="Detail" mode="Opaque" x="0" y="0" width="555" height="19" forecolor="#FFFFFF" backcolor="#FDF1EB" uuid="74a07869-8802-4ec6-a806-aab59a48f860"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</rectangle>
+			<textField>
+				<reportElement x="1" y="1" width="118" height="17" uuid="7afdfe5c-9e68-47cb-b66f-4cd4a33d78a0"/>
+				<textElement>
+					<font fontName="Verdana" size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{id_producto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="288" y="1" width="88" height="17" uuid="33a1d4f6-78d6-4e8d-b5d4-4c258bb42ac3"/>
+				<textElement>
+					<font fontName="Verdana" size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Cantidad}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="436" y="2" width="116" height="17" uuid="5b1ea6e1-a729-48d3-822a-23767da22824"/>
+				<textElement>
+					<font fontName="Verdana" size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{total_vendido}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="138" y="1" width="116" height="17" uuid="5614ced5-54b6-4ec0-8484-fb25a8ff2f79"/>
+				<textElement>
+					<font fontName="Verdana" size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nombre}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="401" y="3" width="35" height="15" uuid="aa0635cd-4ed8-4711-839f-f64a7b9ac906"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font fontName="Verdana" isBold="true"/>
+				</textElement>
+				<text><![CDATA[RD$]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<summary>
+		<band height="58">
+			<subreport>
+				<reportElement x="0" y="0" width="551" height="55" uuid="97341901-f9f5-4b88-adfa-129e25322115"/>
+				<subreportParameter name="id_ventaa">
+					<subreportParameterExpression><![CDATA[$P{id_venta}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "total_venta.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</summary>
+</jasperReport>
