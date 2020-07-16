@@ -1,22 +1,62 @@
 package vista.compras;
 
+import java.awt.event.ActionEvent;
+import javax.swing.JFrame;
 import vista.PantallaPrincipal;
 
 /**
  *
  * @author Lisito
  */
-public class PantallaCompras extends javax.swing.JFrame {
+public class PantallaCompras extends javax.swing.JDialog {
 
-    public PantallaCompras() {
+    public PantallaCompras(JFrame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
-        setResizable(false);
-        setLocationRelativeTo(null);
+        
 
     }
+    
+    private javax.swing.JLabel background;
+    private javax.swing.JLabel background_contado;
+    private javax.swing.JButton btn_agregarFacturaContado;
+    private javax.swing.JButton btn_agregarFacturaCredito;
+    private javax.swing.JButton btn_atras;
+    private javax.swing.JButton btn_avanzadoContado;
+    private javax.swing.JButton btn_avanzadoCredito;
+    private javax.swing.JButton btn_buscarFacturasContado;
+    private javax.swing.JButton btn_buscarFacturasCredito;
+    private javax.swing.JButton btn_exportarFacturaContado;
+    private javax.swing.JButton btn_exportarFacturaCredito;
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.ButtonGroup buttonGroup2;
+    private javax.swing.JTextField input_facturaContado;
+    private javax.swing.JTextField input_facturaCredito;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JRadioButton rbton_fechaContado;
+    private javax.swing.JRadioButton rbton_fechaCredito;
+    private javax.swing.JRadioButton rbton_idContado;
+    private javax.swing.JRadioButton rbton_idCredito;
+    private javax.swing.JRadioButton rbton_montoContado;
+    private javax.swing.JRadioButton rbton_montoCredito;
+    private javax.swing.JRadioButton rbton_proveedorContado;
+    private javax.swing.JRadioButton rbton_proveedorCredito;
+    private javax.swing.JTable tabla_facturasContado;
+    private javax.swing.JTable tabla_facturasCredito;
 
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
@@ -58,7 +98,7 @@ public class PantallaCompras extends javax.swing.JFrame {
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -74,11 +114,7 @@ public class PantallaCompras extends javax.swing.JFrame {
         btn_buscarFacturasContado.setForeground(new java.awt.Color(255, 255, 255));
         btn_buscarFacturasContado.setText("Buscar");
         btn_buscarFacturasContado.setFocusPainted(false);
-        btn_buscarFacturasContado.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_buscarFacturasContadoActionPerformed(evt);
-            }
-        });
+        btn_buscarFacturasContado.addActionListener(this::btn_buscarFacturasContadoActionPerformed);
         jPanel1.add(btn_buscarFacturasContado, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 40, 77, -1));
 
         btn_exportarFacturaContado.setBackground(new java.awt.Color(0, 102, 153));
@@ -120,11 +156,7 @@ public class PantallaCompras extends javax.swing.JFrame {
         rbton_montoContado.setFont(new java.awt.Font("Verdana", 0, 16)); // NOI18N
         rbton_montoContado.setForeground(new java.awt.Color(255, 255, 255));
         rbton_montoContado.setText("Por monto");
-        rbton_montoContado.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rbton_montoContadoActionPerformed(evt);
-            }
-        });
+        rbton_montoContado.addActionListener(this::rbton_montoContadoActionPerformed);
         jPanel1.add(rbton_montoContado, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 110, 170, 30));
 
         tabla_facturasContado.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -188,11 +220,7 @@ public class PantallaCompras extends javax.swing.JFrame {
         btn_atras.setForeground(new java.awt.Color(255, 255, 255));
         btn_atras.setText("Atras");
         btn_atras.setFocusPainted(false);
-        btn_atras.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_atrasActionPerformed(evt);
-            }
-        });
+        btn_atras.addActionListener(this::btn_atrasActionPerformed);
         jPanel1.add(btn_atras, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, -1, -1));
 
         background_contado.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/fondo_principal.jpg"))); // NOI18N
@@ -315,75 +343,20 @@ public class PantallaCompras extends javax.swing.JFrame {
         setJMenuBar(jMenuBar1);
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    }                    
 
-    private void rbton_montoContadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbton_montoContadoActionPerformed
+    private void rbton_montoContadoActionPerformed(ActionEvent e) {
         // TODO add your handling code here:
-    }//GEN-LAST:event_rbton_montoContadoActionPerformed
+    }                                                  
 
-    private void btn_buscarFacturasContadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_buscarFacturasContadoActionPerformed
+    private void btn_buscarFacturasContadoActionPerformed(ActionEvent e) {
         // TODO add your handling code here:
-    }//GEN-LAST:event_btn_buscarFacturasContadoActionPerformed
+    }                                                         
 
-    private void btn_atrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_atrasActionPerformed
+    private void btn_atrasActionPerformed(ActionEvent e) {
         setVisible(false);
-        PantallaPrincipal.iniciar();
-    }//GEN-LAST:event_btn_atrasActionPerformed
+    }                                         
 
-    public static void iniciar() {
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(PantallaCompras.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        java.awt.EventQueue.invokeLater(() -> {
-            new PantallaCompras().setVisible(true);
-        });
-    }
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel background;
-    private javax.swing.JLabel background_contado;
-    private javax.swing.JButton btn_agregarFacturaContado;
-    private javax.swing.JButton btn_agregarFacturaCredito;
-    private javax.swing.JButton btn_atras;
-    private javax.swing.JButton btn_avanzadoContado;
-    private javax.swing.JButton btn_avanzadoCredito;
-    private javax.swing.JButton btn_buscarFacturasContado;
-    private javax.swing.JButton btn_buscarFacturasCredito;
-    private javax.swing.JButton btn_exportarFacturaContado;
-    private javax.swing.JButton btn_exportarFacturaCredito;
-    private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.ButtonGroup buttonGroup2;
-    private javax.swing.JTextField input_facturaContado;
-    private javax.swing.JTextField input_facturaCredito;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JRadioButton rbton_fechaContado;
-    private javax.swing.JRadioButton rbton_fechaCredito;
-    private javax.swing.JRadioButton rbton_idContado;
-    private javax.swing.JRadioButton rbton_idCredito;
-    private javax.swing.JRadioButton rbton_montoContado;
-    private javax.swing.JRadioButton rbton_montoCredito;
-    private javax.swing.JRadioButton rbton_proveedorContado;
-    private javax.swing.JRadioButton rbton_proveedorCredito;
-    private javax.swing.JTable tabla_facturasContado;
-    private javax.swing.JTable tabla_facturasCredito;
-    // End of variables declaration//GEN-END:variables
+    
+    
 }

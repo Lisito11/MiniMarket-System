@@ -1,25 +1,59 @@
 package vista.productos;
-import bd_logica.Producto;
+
+import java.awt.event.ActionEvent;
+import javax.swing.JFrame;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Lisito
  */
-public class PantallaProductos extends javax.swing.JFrame {
+public class PantallaProductos extends javax.swing.JDialog {
 
-    public PantallaProductos() {
+    public PantallaProductos(JFrame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
-        setResizable(false);
-        setLocationRelativeTo(null);
+
     }
 
+    public PantallaProductos() {
+    }
+    private javax.swing.JLabel background;
+    public javax.swing.JButton btn_agregarProducto;
+    private javax.swing.JButton btn_atras;
+    private javax.swing.JButton btn_buscar;
+    private javax.swing.JButton btn_exportarProductos;
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JTextField input_buscar;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JRadioButton rbtn_ordenarCantidad;
+    private javax.swing.JRadioButton rbtn_ordenarCategoria;
+    private javax.swing.JRadioButton rbtn_ordenarGanancias;
+    private javax.swing.JRadioButton rbtn_ordenarNombre;
+    private javax.swing.JRadioButton rbtn_ordenarPrecioCompra;
+    private javax.swing.JRadioButton rbtn_ordenarPrecioVenta;
+    private javax.swing.JTable tabla_listaProductos;
+    public DefaultTableModel dtm;
 
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
+        String[] columnNames = {"ID Producto", "Nombre ", "Categoria", "Cantidad", "Costo", "Venta", "Ganancia"};
+        Object[][] datos = {};
+        dtm = new DefaultTableModel(datos, columnNames) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
         buttonGroup1 = new javax.swing.ButtonGroup();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tabla_listaProductos = new javax.swing.JTable();
+        tabla_listaProductos = new JTable(dtm);
         btn_agregarProducto = new javax.swing.JButton();
         input_buscar = new javax.swing.JTextField();
         btn_buscar = new javax.swing.JButton();
@@ -38,30 +72,11 @@ public class PantallaProductos extends javax.swing.JFrame {
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         tabla_listaProductos.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        tabla_listaProductos.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
-        tabla_listaProductos.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
-            },
-            new String [] {
-                "ID Producto", "Nombre ", "Categoria", "Cantidad", "Costo", "Venta", "Ganancia"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
+        tabla_listaProductos.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N 
         tabla_listaProductos.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tabla_listaProductos);
         if (tabla_listaProductos.getColumnModel().getColumnCount() > 0) {
@@ -75,17 +90,24 @@ public class PantallaProductos extends javax.swing.JFrame {
         }
 
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 50, 740, 460));
+        tabla_listaProductos.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    System.out.println("Se ha hecho doble click");
+                    int fila = tabla_listaProductos.getSelectedRow();
+                    if (fila >= 0) {
 
+                    }
+                }
+            }
+        });
         btn_agregarProducto.setBackground(new java.awt.Color(0, 102, 153));
         btn_agregarProducto.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         btn_agregarProducto.setForeground(new java.awt.Color(255, 255, 255));
         btn_agregarProducto.setText("Agregar Producto");
         btn_agregarProducto.setFocusPainted(false);
-        btn_agregarProducto.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_agregarProductoActionPerformed(evt);
-            }
-        });
+        btn_agregarProducto.addActionListener(this::btn_agregarProducto);
         getContentPane().add(btn_agregarProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 520, 210, -1));
         getContentPane().add(input_buscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 520, 200, 30));
 
@@ -113,11 +135,7 @@ public class PantallaProductos extends javax.swing.JFrame {
         btn_atras.setForeground(new java.awt.Color(255, 255, 255));
         btn_atras.setText("Atras");
         btn_atras.setFocusPainted(false);
-        btn_atras.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_atrasActionPerformed(evt);
-            }
-        });
+        btn_atras.addActionListener(this::btn_atras);
         getContentPane().add(btn_atras, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 10, -1, -1));
 
         rbtn_ordenarCategoria.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
@@ -166,75 +184,18 @@ public class PantallaProductos extends javax.swing.JFrame {
         setJMenuBar(jMenuBar1);
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
-
-    private void btn_atrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_atrasActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btn_atrasActionPerformed
-
-    private void btn_agregarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_agregarProductoActionPerformed
-        
-        /*Producto p = new Producto();
-        p.Agregar();*/  
-            NewJDialog agregarProducto = new NewJDialog(new PantallaProductos(),true);
-
-        agregarProducto.setVisible(true);
-        
-        
-    }//GEN-LAST:event_btn_agregarProductoActionPerformed
-
-    /*public static void main(String args[]) {
-    //public static void iniciar(){
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(PantallaProductos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        java.awt.EventQueue.invokeLater(() -> {
-            new PantallaProductos().setVisible(true);
-        });
-    }*/
-    public static void iniciar(){
-    try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(PantallaProductos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        java.awt.EventQueue.invokeLater(() -> {
-            new PantallaProductos().setVisible(true);
-        });
+        setResizable(false);
+        setLocationRelativeTo(null);
     }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel background;
-    public javax.swing.JButton btn_agregarProducto;
-    private javax.swing.JButton btn_atras;
-    private javax.swing.JButton btn_buscar;
-    private javax.swing.JButton btn_exportarProductos;
-    private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.JTextField input_buscar;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JRadioButton rbtn_ordenarCantidad;
-    private javax.swing.JRadioButton rbtn_ordenarCategoria;
-    private javax.swing.JRadioButton rbtn_ordenarGanancias;
-    private javax.swing.JRadioButton rbtn_ordenarNombre;
-    private javax.swing.JRadioButton rbtn_ordenarPrecioCompra;
-    private javax.swing.JRadioButton rbtn_ordenarPrecioVenta;
-    private javax.swing.JTable tabla_listaProductos;
-    // End of variables declaration//GEN-END:variables
+    private void btn_atras(ActionEvent e) {
+        setVisible(false);
+    }
+
+    private void btn_agregarProducto(ActionEvent e) {
+        FormAgregarProducto agregarProducto = new FormAgregarProducto(new PantallaProductos(), true);
+        agregarProducto.setVisible(true);
+
+    }
+
 }

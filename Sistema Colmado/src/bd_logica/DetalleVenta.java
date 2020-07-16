@@ -169,7 +169,7 @@ public class DetalleVenta extends Consultas {
     }
 
     public boolean FinalizarVenta(String idVenta) {
-        sql = "call proc_completarVenta(?);";
+        sql = "call proc_FinalizarVenta(?);";
         try {
             ps = (PreparedStatement) conexion.prepareStatement(sql);
             ps.setString(1, idVenta);

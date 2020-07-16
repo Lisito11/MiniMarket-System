@@ -14,17 +14,21 @@ public class Login extends javax.swing.JFrame {
 
     public Login() {
         initComponents();
-        mostrarFondoLogo();
-        setTitle("Login");
-        setResizable(false);
-        setLocationRelativeTo(null);
     }
 
-    @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    public javax.swing.JButton btn_login;
+    private javax.swing.JLabel fondo;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel logo;
+    public javax.swing.JPasswordField txt_password;
+    public javax.swing.JTextField txt_usuario;
+    private ImageIcon img, img2;
+    private Icon icono, icono2;
+    public static String texto = "";
+    private ImageIcon icono_principal;
+    
+    //Metodo donde se inicializan los componentes
     private void initComponents() {
-
-        jSeparator1 = new javax.swing.JSeparator();
         txt_usuario = new javax.swing.JTextField();
         txt_password = new javax.swing.JPasswordField();
         logo = new javax.swing.JLabel();
@@ -42,11 +46,6 @@ public class Login extends javax.swing.JFrame {
         txt_usuario.setAutoscrolls(false);
         txt_usuario.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, null, java.awt.Color.green, java.awt.Color.green, null));
         txt_usuario.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        txt_usuario.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_usuarioActionPerformed(evt);
-            }
-        });
         getContentPane().add(txt_usuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 330, 250, 30));
 
         txt_password.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
@@ -69,11 +68,7 @@ public class Login extends javax.swing.JFrame {
         btn_login.setText("Iniciar Sesión");
         btn_login.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btn_login.setBorderPainted(false);
-        btn_login.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_loginActionPerformed(evt);
-            }
-        });
+        btn_login.addActionListener(this::btn_login);
         getContentPane().add(btn_login, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 430, 250, 50));
 
         jLabel2.setBackground(new java.awt.Color(204, 204, 204));
@@ -85,56 +80,27 @@ public class Login extends javax.swing.JFrame {
         fondo.setBackground(new java.awt.Color(255, 255, 255));
         fondo.setForeground(new java.awt.Color(255, 255, 255));
         getContentPane().add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 450, 550));
-
+        setTitle("Login - MiniMarket System");
         pack();
-    }// </editor-fold>//GEN-END:initComponents
-
-    private void txt_usuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_usuarioActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_usuarioActionPerformed
-
-    public static void main(String args[]) {
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        java.awt.EventQueue.invokeLater(() -> {
-            new Login().setVisible(true);
-        });
-    }
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    public javax.swing.JButton btn_login;
-    private javax.swing.JLabel fondo;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JLabel logo;
-    public javax.swing.JPasswordField txt_password;
-    public javax.swing.JTextField txt_usuario;
-    // End of variables declaration//GEN-END:variables
-    private ImageIcon img, img2;
-    private Icon icono, icono2;
-    public static String texto = "";
-
-    public void mostrarFondoLogo() {
+        
+        // Agregando la imagen del fondo y El logo
         img = new ImageIcon("src/imagenes/fondo_login.png");
         img2 = new ImageIcon("src/imagenes/logo.png");
-
         icono = new ImageIcon(img.getImage().getScaledInstance(fondo.getWidth(), fondo.getHeight(), Image.SCALE_DEFAULT));
         icono2 = new ImageIcon(img2.getImage().getScaledInstance(logo.getWidth(), logo.getHeight(), Image.SCALE_DEFAULT));
         logo.setIcon(icono2);
         fondo.setIcon(icono);
+        icono_principal = new ImageIcon("src/imagenes/icono.png");
+        setIconImage(icono_principal.getImage());
+        setResizable(false);
+        setLocationRelativeTo(null);
+        
     }
 
-    private void btn_loginActionPerformed(java.awt.event.ActionEvent evt) {
+    //Metodo para validar los datos de sesión y ingresar al programa principal
+    private void btn_login(java.awt.event.ActionEvent evt) {
         Usuario user = new Usuario();
-        String pass = new String(txt_password.getText());
+        String pass = txt_password.getText();
         if (!txt_usuario.getText().equals("") && !pass.equals("")) {
             user.setUsuario(txt_usuario.getText());
             user.setPassword(pass);
@@ -153,4 +119,23 @@ public class Login extends javax.swing.JFrame {
         }
 
     }
+    
+    
+    //METODO MAIN PARA INICIAR LA APLICACION
+    public static void main(String args[]) {
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        java.awt.EventQueue.invokeLater(() -> {
+            new Login().setVisible(true);
+        });
+    }
+    
 }

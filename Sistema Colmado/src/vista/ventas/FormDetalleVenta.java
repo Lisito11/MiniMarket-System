@@ -9,19 +9,28 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Lisito
  */
-public class FormDetalleVenta extends javax.swing.JFrame {
+public class FormDetalleVenta extends javax.swing.JDialog {
 
     DetalleVenta dv = new DetalleVenta();
-
     String idVenta = FormVenta.idVenta;
 
-    public FormDetalleVenta() {
+    public FormDetalleVenta(javax.swing.JDialog parent, boolean modal) {
+        super(parent, modal);
         initComponents();
 
     }
 
+    public javax.swing.JButton btn_añadirProducto;
+    public javax.swing.JButton btn_finalizarVenta;
+    public javax.swing.JButton btn_quitarProducto;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTable1;
+    public DefaultTableModel dtm;
+
     private void initComponents() {
-    String[] columnNames = {"ID Producto", "Hora de la venta", "Cantidad"};
+        String[] columnNames = {"ID Producto", "Hora de la venta", "Cantidad"};
         Object[][] datos = {};
         dtm = new DefaultTableModel(datos, columnNames) {
             @Override
@@ -37,7 +46,7 @@ public class FormDetalleVenta extends javax.swing.JFrame {
         btn_quitarProducto = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Verdana", 1, 24)); // NOI18N
@@ -49,12 +58,12 @@ public class FormDetalleVenta extends javax.swing.JFrame {
         btn_finalizarVenta.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         btn_finalizarVenta.setForeground(new java.awt.Color(255, 255, 255));
         btn_finalizarVenta.setText("Finalizar Venta");
-        btn_finalizarVenta.addActionListener(this::btn_finalizarVentaActionPerformed);
+        btn_finalizarVenta.addActionListener(this::btn_finalizarVenta);
         getContentPane().add(btn_finalizarVenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 300, 140, -1));
 
         jTable1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jTable1.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
-        
+
         jTable1.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTable1);
         if (jTable1.getColumnModel().getColumnCount() > 0) {
@@ -69,14 +78,14 @@ public class FormDetalleVenta extends javax.swing.JFrame {
         btn_añadirProducto.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         btn_añadirProducto.setForeground(new java.awt.Color(255, 255, 255));
         btn_añadirProducto.setText("Añadir Producto");
-        btn_añadirProducto.addActionListener(this::btn_añadirProductoActionPerformed);
+        btn_añadirProducto.addActionListener(this::btn_añadirProducto);
         getContentPane().add(btn_añadirProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 300, 150, -1));
 
         btn_quitarProducto.setBackground(new java.awt.Color(0, 102, 153));
         btn_quitarProducto.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         btn_quitarProducto.setForeground(new java.awt.Color(255, 255, 255));
         btn_quitarProducto.setText("Quitar Producto");
-        btn_quitarProducto.addActionListener(this::btn_quitarProductoActionPerformed);
+        btn_quitarProducto.addActionListener(this::btn_quitarProducto);
         getContentPane().add(btn_quitarProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 300, 150, -1));
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/fondo_principal.jpg"))); // NOI18N
@@ -84,43 +93,18 @@ public class FormDetalleVenta extends javax.swing.JFrame {
 
         pack();
     }
-    public boolean ValidarHora(String h) {
-        String hora = h;
-        if (hora.length() > 5) {
-            return false;
-        } else if (hora.length() == 5) {
-            char pos1 = hora.charAt(0);
-            char pos2 = hora.charAt(1);
-            char pos3 = hora.charAt(3);
-            char pos4 = hora.charAt(4);
-            char pos5 = hora.charAt(2);
 
-            if (!String.valueOf(pos5).equals(":")) {
-                return false;
-            }
-            int suma1 = Integer.parseInt(String.valueOf(pos1) + String.valueOf(pos2));
-            int suma2 = Integer.parseInt(String.valueOf(pos3) + String.valueOf(pos4));
-
-            return !(suma1 >= 24 || suma2 > 59);
-
-        } else {
-            return false;
-        }
-    }
-
-    public boolean ValidarCantidad(String c) {
-        String numCuenta = c;
-        int NOnum = 0;
-        for (int i = 0; i < numCuenta.length(); i++) {
-            if (!Character.isDigit(numCuenta.charAt(i))) {
-                NOnum++;
-            }
-        }
-        return NOnum == 0;
-    }
-
-
-    private void btn_añadirProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_añadirProductoActionPerformed
+//------------------------------------------------------------------------------    
+    /* Acciones de los botones principales
+    *  
+    *  Añadir Producto
+    *  Quitar Producto
+    *  Finalizar Venta
+    *  
+     */
+    
+    // Metodo - Añadir Producto
+    private void btn_añadirProducto(java.awt.event.ActionEvent evt) {
 
         String idproducto = JOptionPane.showInputDialog("Introduzca el ID del producto");
         //Validando id producto
@@ -155,10 +139,10 @@ public class FormDetalleVenta extends javax.swing.JFrame {
         System.out.println(hora);
         System.out.println(cantidad);
 
+    }
 
-    }//GEN-LAST:event_btn_añadirProductoActionPerformed
-
-    private void btn_quitarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_quitarProductoActionPerformed
+    // Metodo - Quitar Producto
+    private void btn_quitarProducto(java.awt.event.ActionEvent evt) {
         int fila = jTable1.getSelectedRow();
         if (fila >= 0) {
             String nombre = String.valueOf(dtm.getValueAt(jTable1.getSelectedRow(), 0));
@@ -175,49 +159,71 @@ public class FormDetalleVenta extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Selecciona un producto para Eliminar");
         }
 
+    }
 
-    }//GEN-LAST:event_btn_quitarProductoActionPerformed
-
-    private void btn_finalizarVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_finalizarVentaActionPerformed
+    // Metodo - Finalizar Venta
+    private void btn_finalizarVenta(java.awt.event.ActionEvent evt) {
 
         if (dv.FinalizarVenta(idVenta)) {
             System.out.println("Finalizado");
             setVisible(false);
-            PantallaVentas.iniciar();
+            //PantallaVentas.iniciar();
         } else {
             JOptionPane.showMessageDialog(null, "Ha ocurrido un error.");
         }
-    }//GEN-LAST:event_btn_finalizarVentaActionPerformed
+    }
+    
+//------------------------------------------------------------------------------    
 
+    /* Metodos Auxiliares de los botones Principales
+     *
+     * Auxiliar Validar Hora
+     * Auxiliar Validar Cantidad
+     * Auxiliar Agregar Fila
+     * Auxiliar Mostrar Productos
+     *
+     */
+    // Metodo - Auxiliar Validar Hora
+    public boolean ValidarHora(String h) {
+        String hora = h;
+        if (hora.length() > 5) {
+            return false;
+        } else if (hora.length() == 5) {
+            char pos1 = hora.charAt(0);
+            char pos2 = hora.charAt(1);
+            char pos3 = hora.charAt(3);
+            char pos4 = hora.charAt(4);
+            char pos5 = hora.charAt(2);
+
+            if (!String.valueOf(pos5).equals(":")) {
+                return false;
+            }
+            int suma1 = Integer.parseInt(String.valueOf(pos1) + String.valueOf(pos2));
+            int suma2 = Integer.parseInt(String.valueOf(pos3) + String.valueOf(pos4));
+
+            return !(suma1 >= 24 || suma2 > 59);
+
+        } else {
+            return false;
+        }
+    }
+    
+    // Metodo - Auxiliar Validar Cantidad
+    public boolean ValidarCantidad(String c) {
+        String numCuenta = c;
+        int NOnum = 0;
+        for (int i = 0; i < numCuenta.length(); i++) {
+            if (!Character.isDigit(numCuenta.charAt(i))) {
+                NOnum++;
+            }
+        }
+        return NOnum == 0;
+    }
+    
+    // Metodo - Auxiliar Agregar Fila
     public void setFila(String a, String b, String c) {
         Object[] newRow = {a, b, c};
         dtm.addRow(newRow);
     }
-
-    public static void iniciar() {
-
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FormDetalleVenta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        java.awt.EventQueue.invokeLater(() -> {
-            new FormDetalleVenta().setVisible(true);
-        });
-    }
-
-    public javax.swing.JButton btn_añadirProducto;
-    public javax.swing.JButton btn_finalizarVenta;
-    public javax.swing.JButton btn_quitarProducto;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    public DefaultTableModel dtm;
 
 }

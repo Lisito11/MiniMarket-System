@@ -1,21 +1,42 @@
 package vista.productos;
 
+
 /**
  *
  * @author Lisito
  */
-public class FormAgregarProducto extends javax.swing.JFrame {
+public class FormAgregarProducto extends javax.swing.JDialog {
 
-    public FormAgregarProducto() {
+
+    public FormAgregarProducto(javax.swing.JDialog parent, boolean modal) {
+        super(parent, modal);
         initComponents();
-        setResizable(false);
-        setLocationRelativeTo(null);
     }
 
-    @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private javax.swing.JButton btn_agregarProducto;
+    private javax.swing.JButton btn_atras;
+    private javax.swing.JButton btn_calcularGanancia;
+    private javax.swing.JLabel fondo;
+    private javax.swing.JTextField input_idProducto;
+    private javax.swing.JTextField input_nombreProducto;
+    private javax.swing.JTextField input_precioCosto;
+    private javax.swing.JTextField input_precioVenta;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JComboBox<String> jcb_categoria;
+    private javax.swing.JLabel jlb_agregarProducto;
+    private javax.swing.JLabel jlb_cantidad;
+    private javax.swing.JLabel jlb_categoria;
+    private javax.swing.JLabel jlb_ganancia;
+    private javax.swing.JLabel jlb_idProducto;
+    private javax.swing.JLabel jlb_nombreProducto;
+    private javax.swing.JLabel jlb_precioCosto;
+    private javax.swing.JLabel jlb_precioVenta;
+    private javax.swing.JLabel jlb_showGanancia;
+    private javax.swing.JSpinner jsp_cantidad;
 
+    @SuppressWarnings("unchecked")
+
+    private void initComponents() {
         jlb_agregarProducto = new javax.swing.JLabel();
         input_idProducto = new javax.swing.JTextField();
         jlb_nombreProducto = new javax.swing.JLabel();
@@ -45,12 +66,6 @@ public class FormAgregarProducto extends javax.swing.JFrame {
         jlb_agregarProducto.setForeground(new java.awt.Color(255, 255, 255));
         jlb_agregarProducto.setText("Agregar Producto");
         getContentPane().add(jlb_agregarProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 30, -1, -1));
-
-        input_idProducto.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                input_idProductoActionPerformed(evt);
-            }
-        });
         getContentPane().add(input_idProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 130, 150, 25));
 
         jlb_nombreProducto.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
@@ -92,7 +107,7 @@ public class FormAgregarProducto extends javax.swing.JFrame {
 
         jcb_categoria.setBackground(new java.awt.Color(255, 255, 255));
         jcb_categoria.setForeground(new java.awt.Color(0, 0, 0));
-        jcb_categoria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jcb_categoria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Item 1", "Item 2", "Item 3", "Item 4"}));
         getContentPane().add(jcb_categoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 220, 150, 25));
         getContentPane().add(input_nombreProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 130, 150, 25));
         getContentPane().add(jsp_cantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 330, 130, -1));
@@ -112,12 +127,6 @@ public class FormAgregarProducto extends javax.swing.JFrame {
         btn_calcularGanancia.setForeground(new java.awt.Color(255, 255, 255));
         btn_calcularGanancia.setText("Calcular");
         getContentPane().add(btn_calcularGanancia, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 430, 85, -1));
-
-        input_precioVenta.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                input_precioVentaActionPerformed(evt);
-            }
-        });
         getContentPane().add(input_precioVenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 330, 100, -1));
         getContentPane().add(input_precioCosto, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 400, 100, -1));
 
@@ -136,52 +145,8 @@ public class FormAgregarProducto extends javax.swing.JFrame {
         getContentPane().add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 410, 560));
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
-
-    private void input_idProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_input_idProductoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_input_idProductoActionPerformed
-
-    private void input_precioVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_input_precioVentaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_input_precioVentaActionPerformed
-
-    public static void main(String args[]) {
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FormAgregarProducto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        java.awt.EventQueue.invokeLater(() -> {
-            new FormAgregarProducto().setVisible(true);
-        });
+        setResizable(false);
+        setLocationRelativeTo(null);
     }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btn_agregarProducto;
-    private javax.swing.JButton btn_atras;
-    private javax.swing.JButton btn_calcularGanancia;
-    private javax.swing.JLabel fondo;
-    private javax.swing.JTextField input_idProducto;
-    private javax.swing.JTextField input_nombreProducto;
-    private javax.swing.JTextField input_precioCosto;
-    private javax.swing.JTextField input_precioVenta;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JComboBox<String> jcb_categoria;
-    private javax.swing.JLabel jlb_agregarProducto;
-    private javax.swing.JLabel jlb_cantidad;
-    private javax.swing.JLabel jlb_categoria;
-    private javax.swing.JLabel jlb_ganancia;
-    private javax.swing.JLabel jlb_idProducto;
-    private javax.swing.JLabel jlb_nombreProducto;
-    private javax.swing.JLabel jlb_precioCosto;
-    private javax.swing.JLabel jlb_precioVenta;
-    private javax.swing.JLabel jlb_showGanancia;
-    private javax.swing.JSpinner jsp_cantidad;
-    // End of variables declaration//GEN-END:variables
 }

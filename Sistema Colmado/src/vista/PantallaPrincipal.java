@@ -5,8 +5,8 @@ import vista.ventas.PantallaVentas;
 import java.awt.Image;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import bd_logica.Venta;
 import vista.productos.PantallaProductos;
+import vista.ventas.PantallaVentas;
 
 /**
  *
@@ -68,6 +68,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Minimarket - System");
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(255, 51, 0));
@@ -204,30 +205,21 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_entrarProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_entrarProductosActionPerformed
-        setVisible(false);
-        PantallaProductos pp = new PantallaProductos();
+        PantallaProductos pp = new PantallaProductos(new PantallaPrincipal(),false);
         pp.setVisible(true);
         //PantallaCompras.iniciar();
     }//GEN-LAST:event_btn_entrarProductosActionPerformed
 
     private void btn_entrarComprasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_entrarComprasActionPerformed
-        setVisible(false);
-        PantallaCompras pc = new PantallaCompras();
+        PantallaCompras pc = new PantallaCompras(new PantallaPrincipal(),false);
         pc.setVisible(true);
-        //PantallaCompras.iniciar();
-
-        // TODO add your handling code here:
     }//GEN-LAST:event_btn_entrarComprasActionPerformed
 
     private void btn_entrarVentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_entrarVentasActionPerformed
-        setVisible(false);
-        PantallaVentas pv = new PantallaVentas();
+        PantallaVentas pv = new PantallaVentas(new PantallaPrincipal(),false);
         pv.setVisible(true);
-        //PantallaVentas.iniciar();
-        
-        
-	}//GEN-LAST:event_btn_entrarVentasActionPerformed
 
+	}//GEN-LAST:event_btn_entrarVentasActionPerformed
     public static void iniciar() {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -244,13 +236,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
             new PantallaPrincipal().setVisible(true);
         });
     }
-    
-        
-    
-    
 
-   
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel autor;
@@ -282,10 +268,11 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     // End of variables declaration//GEN-END:variables
-        String nombre = Login.texto;
-
+    String nombre = Login.texto;
+    ImageIcon icono_principal;
     private ImageIcon img, img2, img3;
     private Icon icono, icono2, icono3;
+
     public void mostrarFondos() {
         img = new ImageIcon("src/imagenes/productos_img.png");
         img2 = new ImageIcon("src/imagenes/ventas_img.png");
@@ -294,13 +281,12 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         icono = new ImageIcon(img.getImage().getScaledInstance(fondo_productos.getWidth(), fondo_productos.getHeight(), Image.SCALE_DEFAULT));
         icono2 = new ImageIcon(img2.getImage().getScaledInstance(img_ventas.getWidth(), img_ventas.getHeight(), Image.SCALE_DEFAULT));
         icono3 = new ImageIcon(img3.getImage().getScaledInstance(img_compra.getWidth(), img_compra.getHeight(), Image.SCALE_DEFAULT));
-
+        icono_principal = new ImageIcon("src/imagenes/icono.png");
+        setIconImage(icono_principal.getImage());
         img_compra.setIcon(icono3);
         fondo_productos.setIcon(icono);
         img_ventas.setIcon(icono2);
 
-
     }
-    
 
 }
