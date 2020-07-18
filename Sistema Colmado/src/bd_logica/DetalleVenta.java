@@ -3,6 +3,7 @@ package bd_logica;
 import com.mysql.jdbc.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalTime;
 
 public class DetalleVenta extends Consultas {
 
@@ -102,8 +103,8 @@ public class DetalleVenta extends Consultas {
         return null;
 
     }
-    
-     public String[] BuscarProductoMenosVendido(String idVenta) {
+
+    public String[] BuscarProductoMenosVendido(String idVenta) {
         sql = "select dv.id_producto,p.nombre, sum(dv.cantidad) from detalle_venta dv inner join producto p on dv.id_producto = p.id_producto WHERE dv.id_venta = ? GROUP by dv.id_producto \n"
                 + "order by sum(dv.cantidad) asc LIMIT 1";
         ResultSet rs = null;
@@ -169,7 +170,7 @@ public class DetalleVenta extends Consultas {
     }
 
     public boolean FinalizarVenta(String idVenta) {
-        sql = "call proc_FinalizarVenta(?);";
+        sql = "call proc_completarVenta(?);";
         try {
             ps = (PreparedStatement) conexion.prepareStatement(sql);
             ps.setString(1, idVenta);
@@ -197,6 +198,65 @@ public class DetalleVenta extends Consultas {
         return datos;
 
     }
+
+    public boolean editarFacturaAñadirProducto(String idproducto, String cantidad, String hora, String idVenta) {
+        sql = "call proc_ActualizarProducto(?,?,?,?)";
+        try {
+            
+            ps = (PreparedStatement) conexion.prepareStatement(sql);
+            ps.setString(1, idproducto);
+            ps.setInt(2, Integer.parseInt(cantidad));
+            ps.setString(3, hora);
+            ps.setInt(4, Integer.parseInt(idVenta));
+            ps.execute();
+            System.out.println("PRODUCTO AÑADIDO");
+            System.out.println();
+            return true;
+        } catch (SQLException e) {
+            System.out.println(e);
+            return false;
+        }
+    }
+
+    public boolean editarFacturaVerificarProducto(String idproducto, String hora, String cantidad) {
+        sql = "select * from detalle_venta where id_producto = ?  and cantidad = ? and hora_producto = ?";
+        ResultSet rs = null;
+        try {
+            ps = (PreparedStatement) conexion.prepareStatement(sql);
+            ps.setString(1, idproducto);
+            ps.setInt(2, Integer.parseInt(cantidad));
+            ps.setString(3, hora);
+
+            rs = ps.executeQuery();
+
+            return rs.next();
+            
+        } catch (SQLException e) {
+            System.err.println(e);
+            return false;
+        }
+    }
+    
+    
+    public boolean editarFacturaEliminarProducto(String nombre, int cnt, String hora, String IdVenta) {
+        sql = "call proc_EliminarProducto(?,?,?,?)";
+        try {
+            ps = (PreparedStatement) conexion.prepareStatement(sql);
+            ps.setString(1, nombre);
+            ps.setInt(2, cnt);
+            ps.setString(3, hora);
+            ps.setInt(4, Integer.parseInt(IdVenta));
+            ps.execute();
+            System.out.println("Producto Elminado");
+            return true;
+
+        } catch (SQLException e) {
+            System.err.println(e);
+            return false;
+        }
+    }
+    
+    
 
     @Override
     public boolean Agregar() {

@@ -4,6 +4,7 @@ import bd_logica.DetalleVenta;
 import java.awt.event.ActionEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -31,6 +32,7 @@ public class EditarVenta extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     public DefaultTableModel dtm;
+
 
     @SuppressWarnings("unchecked")
     private void initComponents() {
@@ -99,7 +101,7 @@ public class EditarVenta extends javax.swing.JDialog {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
                 if (e.getClickCount() == 2) {
-                    System.out.println("Se ha hecho doble click");
+                    /*System.out.println("Se ha hecho doble click");
                     int fila = jTable1.getSelectedRow();
                     if (fila >= 0) {
                         // VIEJOS VALORES
@@ -138,7 +140,10 @@ public class EditarVenta extends javax.swing.JDialog {
 
                         }
 
-                    }
+                    }*/
+
+                    JOptionPane.showMessageDialog(null, "No esta permitido editar el productoF");
+
                 }
             }
         });
@@ -179,11 +184,11 @@ public class EditarVenta extends javax.swing.JDialog {
         }
 
         //AQUI VA PARA AGREGARLO A LA BASE DE DATOS
-        dv.setIdProducto(idproducto);
+        /*dv.setIdProducto(idproducto);
         dv.setIdVenta(Integer.parseInt(idVenta));
         dv.setCantidad(Integer.parseInt(cantidad));
         dv.setFechaProducto(hora);
-        dv.Agregar(dv);
+        dv.Agregar(dv);*/
 
         //Colocando producto en la tabla
         setFila(idproducto, hora, cantidad);
@@ -203,7 +208,7 @@ public class EditarVenta extends javax.swing.JDialog {
             int cantidad = Integer.parseInt(String.valueOf(dtm.getValueAt(jTable1.getSelectedRow(), 2)));
 
             //AQUI VA LA PARTE DE QUITAR UN PRODUCTO A LA BASE DE DATOS
-            dv.Eliminar(nombre, cantidad, hora);
+            dv.editarFacturaEliminarProducto(nombre, cantidad, hora, idVenta);
             dtm.removeRow(fila);
 
             System.out.println(nombre);
@@ -217,18 +222,34 @@ public class EditarVenta extends javax.swing.JDialog {
 
     // Metodo - Finalizar Venta
     private void btn_finalizarVenta(ActionEvent e) {
-        // TODO add your handling code here:
+        String id;
+        String hora;
+        String cantidad;
 
-        if (dv.FinalizarVenta(idVenta)) {
+        for (int i = 0; i < jTable1.getRowCount(); i++) {
+            id = (String) jTable1.getValueAt(i, 0);
+            hora = (String) jTable1.getValueAt(i, 1);
+            cantidad = (String) jTable1.getValueAt(i, 2);
+
+            if (!dv.editarFacturaVerificarProducto(id, hora, cantidad)) {
+                if (dv.editarFacturaAñadirProducto(id, cantidad, hora, idVenta)) {
+                    System.out.println("Producto Añadido ---  " + id + " " + hora + " " + cantidad);
+                }
+            } else {
+                System.out.println("El producto existe --- " + id + " " + hora + " " + cantidad);
+            }
+        }
+
+        setVisible(false);
+        /*if (dv.FinalizarVenta(idVenta)) {
             System.out.println("Finalizado");
             setVisible(false);
         } else {
             JOptionPane.showMessageDialog(null, "Ha ocurrido un error.");
-        }
+        }*/
     }
 
 //------------------------------------------------------------------------------  
-    
     /* Metodos Auxiliares de los botones Principales
      *
      * Auxiliar Validar Hora
@@ -237,7 +258,6 @@ public class EditarVenta extends javax.swing.JDialog {
      * Auxiliar Mostrar Productos
      *
      */
-    
     // Metodo - Auxiliar Validar Hora
     public boolean ValidarHora(String h) {
         String hora = h;
@@ -262,7 +282,7 @@ public class EditarVenta extends javax.swing.JDialog {
             return false;
         }
     }
-    
+
     // Metodo - Auxiliar Validar Cantidad
     public boolean ValidarCantidad(String c) {
         String numCuenta = c;
@@ -274,13 +294,13 @@ public class EditarVenta extends javax.swing.JDialog {
         }
         return NOnum == 0;
     }
-    
+
     // Metodo - Auxiliar Agregar Fila
     public void setFila(String a, String b, String c) {
         Object[] newRow = {a, b, c};
         dtm.addRow(newRow);
     }
-    
+
     // Metodo - Auxiliar Mostrar Productos
     private void mostrarProductos() {
         System.out.println(idVenta);
@@ -297,6 +317,7 @@ public class EditarVenta extends javax.swing.JDialog {
         } catch (SQLException e) {
             System.out.println(e);
         }
+
     }
 
 }
