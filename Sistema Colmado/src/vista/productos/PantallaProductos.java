@@ -1,9 +1,28 @@
 package vista.productos;
 
+import bd_logica.Conexion;
+import bd_logica.Producto;
+import bd_logica.Venta;
+import com.mysql.jdbc.Connection;
 import java.awt.event.ActionEvent;
 import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import static javax.swing.JOptionPane.YES_NO_OPTION;
+import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
+import vista.ventas.PantallaVentas;
+import static vista.ventas.PantallaVentas.idVenta;
 
 /**
  *
@@ -43,7 +62,7 @@ public class PantallaProductos extends javax.swing.JDialog {
 
     @SuppressWarnings("unchecked")
     private void initComponents() {
-        String[] columnNames = {"ID Producto", "Nombre ", "Categoria", "Cantidad", "Costo", "Venta", "Ganancia"};
+        String[] columnNames = {"ID Producto", "Nombre ", "Cantidad", "Costo", "Venta", "Ganancia", "Categoria"};
         Object[][] datos = {};
         dtm = new DefaultTableModel(datos, columnNames) {
             @Override
@@ -88,6 +107,9 @@ public class PantallaProductos extends javax.swing.JDialog {
             tabla_listaProductos.getColumnModel().getColumn(5).setResizable(false);
             tabla_listaProductos.getColumnModel().getColumn(6).setResizable(false);
         }
+        tabla_listaProductos.getColumnModel().getColumn(0).setPreferredWidth(50);
+        tabla_listaProductos.getColumnModel().getColumn(5).setPreferredWidth(50);
+        tabla_listaProductos.getColumnModel().getColumn(2).setPreferredWidth(50);
 
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 50, 740, 460));
         tabla_listaProductos.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -116,6 +138,7 @@ public class PantallaProductos extends javax.swing.JDialog {
         btn_buscar.setForeground(new java.awt.Color(255, 255, 255));
         btn_buscar.setText("Buscar");
         btn_buscar.setFocusPainted(false);
+        btn_buscar.addActionListener(this::btn_buscar);
         getContentPane().add(btn_buscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 520, -1, -1));
 
         btn_exportarProductos.setBackground(new java.awt.Color(0, 102, 153));
@@ -123,6 +146,7 @@ public class PantallaProductos extends javax.swing.JDialog {
         btn_exportarProductos.setForeground(new java.awt.Color(255, 255, 255));
         btn_exportarProductos.setText("Exportar Productos");
         btn_exportarProductos.setFocusPainted(false);
+        btn_exportarProductos.addActionListener(this::btn_exportarProductos);
         getContentPane().add(btn_exportarProductos, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 520, 210, -1));
 
         jLabel1.setFont(new java.awt.Font("Verdana", 1, 20)); // NOI18N
@@ -168,6 +192,20 @@ public class PantallaProductos extends javax.swing.JDialog {
         rbtn_ordenarNombre.setText("Ordenar Por Nombre");
         getContentPane().add(rbtn_ordenarNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 610, 165, 30));
 
+        buttonGroup1.add(rbtn_ordenarNombre);
+        buttonGroup1.add(rbtn_ordenarPrecioVenta);
+        buttonGroup1.add(rbtn_ordenarGanancias);
+        buttonGroup1.add(rbtn_ordenarPrecioCompra);
+        buttonGroup1.add(rbtn_ordenarCantidad);
+        buttonGroup1.add(rbtn_ordenarCategoria);
+
+        rbtn_ordenarCantidad.addActionListener(this::ordernarPor);
+        rbtn_ordenarGanancias.addActionListener(this::ordernarPor);
+        rbtn_ordenarPrecioCompra.addActionListener(this::ordernarPor);
+        rbtn_ordenarPrecioVenta.addActionListener(this::ordernarPor);
+        rbtn_ordenarCategoria.addActionListener(this::ordernarPor);
+        rbtn_ordenarNombre.addActionListener(this::ordernarPor);
+
         jLabel2.setForeground(new java.awt.Color(204, 204, 204));
         jLabel2.setText("© 2020 Colmado El Viejillo. Todos los derechos reservados. ");
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 650, -1, -1));
@@ -186,6 +224,8 @@ public class PantallaProductos extends javax.swing.JDialog {
         pack();
         setResizable(false);
         setLocationRelativeTo(null);
+
+        mostrarProductos();
     }
 
     private void btn_atras(ActionEvent e) {
@@ -196,6 +236,139 @@ public class PantallaProductos extends javax.swing.JDialog {
         FormAgregarProducto agregarProducto = new FormAgregarProducto(new PantallaProductos(), true);
         agregarProducto.setVisible(true);
 
+    }
+
+    private void mostrarProductos() {
+        Producto p = new Producto();
+        ResultSet rs = p.getTable("select p.id_producto, p.nombre,p.cantidad,p.precioCompra, p.PrecioVenta, c.nombre, p.precioVenta - p.precioCompra as ganancia  from producto p inner join categoria c on c.id_categoria = p.id_categoria");
+        try {
+            while (rs.next()) {
+                dtm.addRow(new Object[]{rs.getString("p.id_producto"), rs.getString("p.nombre"), rs.getString("p.cantidad"), rs.getString("p.precioCompra"), rs.getString("p.precioVenta"), rs.getString("ganancia"), rs.getString("c.nombre")});
+            }
+        } catch (SQLException e) {
+        }
+
+    }
+
+    private void filtrarBusqueda(String filtro) {
+        Producto p = new Producto();
+        ResultSet rs = p.getTable(filtro);
+        try {
+            while (rs.next()) {
+                dtm.addRow(new Object[]{rs.getString("p.id_producto"), rs.getString("p.nombre"), rs.getString("p.cantidad"), rs.getString("p.precioCompra"), rs.getString("p.precioVenta"), rs.getString("ganancia"), rs.getString("c.nombre")});
+            }
+        } catch (SQLException e) {
+        }
+    }
+
+    private void limpiarTabla() {
+        int a = dtm.getRowCount() - 1;
+        for (int i = a; i >= 0; i--) {
+            dtm.removeRow(i);
+        }
+    }
+
+    private void ordernarPor(ActionEvent e) {
+        String sql = "select p.id_producto, p.nombre,p.cantidad,p.precioCompra, p.PrecioVenta, c.nombre, p.precioVenta - p.precioCompra as ganancia  from producto p inner join categoria c on c.id_categoria = p.id_categoria ";
+        // Ordenar por Cantidad
+        if (rbtn_ordenarCantidad.isSelected() == true) {
+            limpiarTabla();
+            filtrarBusqueda(sql + "order by p.cantidad DESC");
+        }
+
+        // Ordenar por Ganancia
+        if (rbtn_ordenarGanancias.isSelected() == true) {
+            limpiarTabla();
+            filtrarBusqueda(sql + "order by ganancia DESC ");
+        }
+
+        // Ordenar por Costo
+        if (rbtn_ordenarPrecioCompra.isSelected() == true) {
+            limpiarTabla();
+            filtrarBusqueda(sql + "order by p.precioCompra DESC");
+        }
+
+        // Ordenar por Venta
+        if (rbtn_ordenarPrecioVenta.isSelected() == true) {
+            limpiarTabla();
+            filtrarBusqueda(sql + "order by p.precioVenta DESC");
+        }
+        // Ordenar por Categoria
+        if (rbtn_ordenarCategoria.isSelected() == true) {
+            limpiarTabla();
+            filtrarBusqueda(sql + "order by c.nombre ASC");
+        }
+        // Ordenar por Nombre
+        if (rbtn_ordenarNombre.isSelected() == true) {
+            limpiarTabla();
+            filtrarBusqueda(sql + "order by p.nombre ASC");
+        }
+
+    }
+
+    private void btn_buscar(ActionEvent e) {
+        boolean bandera = true;
+        String nombre;
+        String id;
+        String busqueda = input_buscar.getText();
+        if (busqueda.equals("")) {
+            JOptionPane.showMessageDialog(null, "Introducir ID o Nombre");
+        } else {
+            //Seleccionar la fila dentro del jtable1
+            for (int i = 0; i < tabla_listaProductos.getRowCount(); i++) {
+
+                //Buscamos por ID producto
+                if (String.valueOf(tabla_listaProductos.getValueAt(i, 0)).toLowerCase().equals(busqueda.trim().toLowerCase())) {
+                    tabla_listaProductos.changeSelection(i, 0, false, false);
+                    bandera = true;
+                    id = (String) tabla_listaProductos.getValueAt(i, 0);
+                    System.out.println(id);
+                    input_buscar.setText("");
+
+                    break;
+
+                } //Buscamos por Nombre Producto
+                else if (String.valueOf(tabla_listaProductos.getValueAt(i, 1)).toLowerCase().equals(busqueda.trim().toLowerCase())) {
+                    tabla_listaProductos.changeSelection(i, 1, false, false);
+                    bandera = true;
+                    nombre = (String) tabla_listaProductos.getValueAt(i, 0);
+                    System.out.println(nombre);
+                    input_buscar.setText("");
+
+                    break;
+                }
+                bandera = false;
+            }
+            if (!bandera) {
+                JOptionPane.showMessageDialog(null, "Ese producto no existe");
+            }
+        }
+    }
+    
+      private void btn_exportarProductos(ActionEvent e) {
+        int input = JOptionPane.showConfirmDialog(null, "¿Desea exportar la venta?", "Exportar Venta", YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (input == 0) {
+            exportarProductos();
+        }
+    }
+      
+      private void exportarProductos() {
+        try {
+            Conexion con = new Conexion();
+            Connection conn = (Connection) con.getConection();
+            String nombreReporte = "productos.jasper";
+            String path = "src/reportes/" + nombreReporte;
+            JasperReport reporte = null;
+            reporte = (JasperReport) JRLoader.loadObjectFromFile(path);
+            JasperPrint jprint = JasperFillManager.fillReport(reporte, null, conn);
+            JasperViewer view = new JasperViewer(jprint, false);
+            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            view.setVisible(true);
+
+        } catch (JRException ex) {
+            Logger.getLogger(PantallaVentas.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex.getMessage());
+        }
     }
 
 }

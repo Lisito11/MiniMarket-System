@@ -313,7 +313,7 @@ public class PantallaVentas extends javax.swing.JDialog {
             for (int i = 0; i < jTable1.getRowCount(); i++) {
 
                 //Buscamos por Fecha Venta
-                if (jTable1.getValueAt(i, 1).equals(busqueda)) {
+                if (String.valueOf(jTable1.getValueAt(i, 1)).trim().equals(busqueda)) {
                     jTable1.changeSelection(i, 1, false, false);
                     bandera = true;
                     idVenta = (String) jTable1.getValueAt(i, 0);
@@ -322,7 +322,7 @@ public class PantallaVentas extends javax.swing.JDialog {
                     break;
 
                 } //Buscamos por ID venta
-                else if (jTable1.getValueAt(i, 0).equals(busqueda)) {
+                else if (String.valueOf(jTable1.getValueAt(i, 0)).trim().equals(busqueda)) {
                     jTable1.changeSelection(i, 0, false, false);
                     bandera = true;
                     idVenta = (String) jTable1.getValueAt(i, 0);

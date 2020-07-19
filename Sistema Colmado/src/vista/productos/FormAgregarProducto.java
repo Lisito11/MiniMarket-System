@@ -1,12 +1,15 @@
 package vista.productos;
 
+import bd_logica.Producto;
+import java.awt.event.ActionEvent;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author Lisito
  */
 public class FormAgregarProducto extends javax.swing.JDialog {
-
 
     public FormAgregarProducto(javax.swing.JDialog parent, boolean modal) {
         super(parent, modal);
@@ -33,6 +36,7 @@ public class FormAgregarProducto extends javax.swing.JDialog {
     private javax.swing.JLabel jlb_precioVenta;
     private javax.swing.JLabel jlb_showGanancia;
     private javax.swing.JSpinner jsp_cantidad;
+    public DefaultTableModel dtm;
 
     @SuppressWarnings("unchecked")
 
@@ -103,6 +107,7 @@ public class FormAgregarProducto extends javax.swing.JDialog {
         btn_agregarProducto.setForeground(new java.awt.Color(255, 255, 255));
         btn_agregarProducto.setText("Agregar Producto");
         btn_agregarProducto.setFocusPainted(false);
+        btn_agregarProducto.addActionListener(this::agregarProducto);
         getContentPane().add(btn_agregarProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 490, -1, -1));
 
         jcb_categoria.setBackground(new java.awt.Color(255, 255, 255));
@@ -149,4 +154,19 @@ public class FormAgregarProducto extends javax.swing.JDialog {
         setLocationRelativeTo(null);
     }
 
+    private void agregarProducto(ActionEvent e) {
+        if (!input_idProducto.getText().equals("")
+                || !input_nombreProducto.getText().equals("")
+                || !input_precioVenta.getText().equals("")
+                || !input_precioCosto.getText().equals("")) {
+            if (Integer.parseInt((String) jsp_cantidad.getValue()) < 0) {
+            } else {
+                JOptionPane.showMessageDialog(null, "La cantidad del producto debe de ser mayor que 0");
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Rellenar todos los campos");
+        }
+    }
+
+    //Metodos auxiliares
 }

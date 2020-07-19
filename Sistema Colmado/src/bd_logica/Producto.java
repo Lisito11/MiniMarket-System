@@ -1,6 +1,7 @@
 package bd_logica;
 
 import com.mysql.jdbc.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -88,7 +89,7 @@ public class Producto extends Consultas {
     // CONSULTAS
     @Override
     public boolean Agregar() {
-        sql = "INSERT INTO producto (id_producto,nombre,precioVenta,precioCompra,cantidad,id_categoria,id_proveedor,gananciaProducto) values(?,?,?,?,?,?,?,?)";
+        sql = "INSERT INTO producto (id_producto,nombre,precioVenta,precioCompra,cantidad,id_categoria) values(?,?,?,?,?,?)";
         try {
             ps = (PreparedStatement) conexion.prepareStatement(sql);
             ps.setString(1, this.id_producto);
@@ -97,9 +98,6 @@ public class Producto extends Consultas {
             ps.setDouble(4, this.precioCompra);
             ps.setInt(5, this.cantidad);
             ps.setString(6, this.idcategoria);
-            ps.setString(7, this.idproveedor);
-            ps.setDouble(7, this.gananciaProducto);
-
             ps.execute();
             System.err.println("Producto Agregado");
             return true;
@@ -143,6 +141,20 @@ public class Producto extends Consultas {
                 System.err.println(e);
             }
         }
+    }
+    
+        public ResultSet getTable(String consulta) {
+        ResultSet datos = null;
+        try {
+            ps = (PreparedStatement) conexion.prepareStatement(consulta);
+            datos = ps.executeQuery();
+            System.out.println("CONSULTA EXITOSA");
+            System.out.println();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return datos;
+
     }
 
 }

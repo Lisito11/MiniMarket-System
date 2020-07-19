@@ -102,7 +102,7 @@ public class Login extends javax.swing.JFrame {
         Usuario user = new Usuario();
         String pass = txt_password.getText();
         if (!txt_usuario.getText().equals("") && !pass.equals("")) {
-            user.setUsuario(txt_usuario.getText());
+            user.setUsuario(txt_usuario.getText().trim());
             user.setPassword(pass);
             if (user.ComprobarUsuario(user)) {
                 txt_password.setText("");
