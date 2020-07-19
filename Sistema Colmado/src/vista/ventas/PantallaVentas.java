@@ -175,8 +175,8 @@ public class PantallaVentas extends javax.swing.JDialog {
         btn_exportarAllVentas.setForeground(new java.awt.Color(255, 255, 255));
         btn_exportarAllVentas.setText("Exportar todas las Ventas");
         btn_exportarAllVentas.setFocusPainted(false);
+        btn_exportarAllVentas.addActionListener(this::btn_exportarAllVentas);
         getContentPane().add(btn_exportarAllVentas, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 420, 210, -1));
-        btn_exportarUnaVenta.addActionListener(this::btn_exportarAllVentas);
 
         btn_exportarUnaVenta.setBackground(new java.awt.Color(0, 102, 153));
         btn_exportarUnaVenta.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
@@ -291,6 +291,10 @@ public class PantallaVentas extends javax.swing.JDialog {
 
     // Metodo - Exportar Todas Las Ventas 
     private void btn_exportarAllVentas(ActionEvent e) {
+        int input = JOptionPane.showConfirmDialog(null, "¿Desea exportar la venta?", "Exportar Venta", YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (input == 0) {
+            exportarAllVentas();
+        }
     }
 
     // Metodo - Buscar Venta (Por Fecha Venta o ID Venta)
@@ -387,6 +391,22 @@ public class PantallaVentas extends javax.swing.JDialog {
 
     // Metodo - Auxiliar exportar todas las venta
     private void exportarAllVentas() {
+        try {
+            Conexion con = new Conexion();
+            Connection conn = (Connection) con.getConection();
+            String nombreReporte = "allVentas.jasper";
+            String path = "src/reportes/" + nombreReporte;
+            JasperReport reporte = null;
+            reporte = (JasperReport) JRLoader.loadObjectFromFile(path);
+            JasperPrint jprint = JasperFillManager.fillReport(reporte, null, conn);
+            JasperViewer view = new JasperViewer(jprint, false);
+            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            view.setVisible(true);
+
+        } catch (JRException ex) {
+            Logger.getLogger(PantallaVentas.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex.getMessage());
+        }
     }
 
     //------------------------------------------------------------------------------    

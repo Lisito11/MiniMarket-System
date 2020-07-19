@@ -14,30 +14,29 @@
 		</conditionalStyle>
 	</style>
 	<style name="Crosstab Data Text" hAlign="Center"/>
-	<parameter name="id_venta" class="java.lang.Integer">
-		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
-	</parameter>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\Users\\NBA\\Desktop\\COLMADO\\MiniMarket-System\\Sistema Colmado\\src\\reportes\\"]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[select dv.id_venta, dv.id_producto, p.nombre, sum(dv.cantidad) as Cantidad, sum(p.precioVenta * dv.cantidad) as total_vendido from detalle_venta dv inner join producto p on dv.id_producto = p.id_producto where dv.id_venta = $P!{id_venta} GROUP by dv.id_producto]]>
+		<![CDATA[select id_venta, costo_venta, ganancia_venta, total_venta, cast(fecha_venta as Varchar(12)) as fecha from venta]]>
 	</queryString>
 	<field name="id_venta" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="id_producto" class="java.lang.String">
+	<field name="costo_venta" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="nombre" class="java.lang.String">
+	<field name="ganancia_venta" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="Cantidad" class="java.math.BigDecimal"/>
-	<field name="total_vendido" class="java.math.BigDecimal"/>
+	<field name="total_venta" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="fecha" class="java.lang.String"/>
 	<title>
 		<band height="136" splitType="Stretch">
 			<subreport>
-				<reportElement x="0" y="0" width="552" height="136" uuid="21671a55-4a31-42a7-a5ae-bc3bee9e2c79"/>
+				<reportElement x="1" y="0" width="551" height="136" uuid="a01e2ef0-c323-4053-8a1a-07c5f1de24dc"/>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "header.jasper"]]></subreportExpression>
 			</subreport>
@@ -56,19 +55,23 @@
 				<textElement>
 					<font size="12"/>
 				</textElement>
-				<text><![CDATA[ID Producto]]></text>
+				<text><![CDATA[ID Venta]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="138" y="2" width="116" height="15" forecolor="#FF3300" uuid="85f36e7d-8907-4adb-9506-96f25b363f01"/>
-				<text><![CDATA[Nombre]]></text>
+				<reportElement style="Column header" x="105" y="2" width="116" height="15" forecolor="#FF3300" uuid="85f36e7d-8907-4adb-9506-96f25b363f01"/>
+				<text><![CDATA[Costo Venta]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="276" y="2" width="138" height="15" forecolor="#FF3300" uuid="bffe391d-bbae-4fca-b433-39b3d42eace5"/>
-				<text><![CDATA[Cantidad]]></text>
+				<reportElement style="Column header" x="238" y="2" width="110" height="15" forecolor="#FF3300" uuid="bffe391d-bbae-4fca-b433-39b3d42eace5"/>
+				<text><![CDATA[Ganancia Venta]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="414" y="2" width="138" height="15" forecolor="#FF0000" uuid="f553f0f6-83d0-48bc-bc2b-fc42fecb4c5e"/>
-				<text><![CDATA[Total vendido]]></text>
+				<reportElement style="Column header" x="365" y="2" width="92" height="15" forecolor="#FF0000" uuid="f553f0f6-83d0-48bc-bc2b-fc42fecb4c5e"/>
+				<text><![CDATA[Total Venta]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="463" y="2" width="92" height="15" forecolor="#FF0000" uuid="f67d127f-4c9c-4cd6-944d-6e21e1796462"/>
+				<text><![CDATA[Fecha Venta]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -80,52 +83,71 @@
 					<pen lineWidth="0.5"/>
 				</graphicElement>
 			</rectangle>
-			<textField>
-				<reportElement x="1" y="1" width="118" height="17" uuid="7afdfe5c-9e68-47cb-b66f-4cd4a33d78a0"/>
-				<textElement>
-					<font fontName="Verdana" size="11" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{id_producto}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="288" y="1" width="88" height="17" uuid="33a1d4f6-78d6-4e8d-b5d4-4c258bb42ac3"/>
-				<textElement>
-					<font fontName="Verdana" size="11" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{Cantidad}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="436" y="2" width="116" height="17" uuid="5b1ea6e1-a729-48d3-822a-23767da22824"/>
-				<textElement>
-					<font fontName="Verdana" size="11" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{total_vendido}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="138" y="1" width="116" height="17" uuid="5614ced5-54b6-4ec0-8484-fb25a8ff2f79"/>
-				<textElement>
-					<font fontName="Verdana" size="11" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{nombre}]]></textFieldExpression>
-			</textField>
 			<staticText>
-				<reportElement x="401" y="3" width="35" height="15" uuid="aa0635cd-4ed8-4711-839f-f64a7b9ac906"/>
+				<reportElement x="365" y="3" width="24" height="15" uuid="aa0635cd-4ed8-4711-839f-f64a7b9ac906"/>
 				<textElement textAlignment="Right" verticalAlignment="Top">
 					<font fontName="Verdana" isBold="true"/>
 				</textElement>
 				<text><![CDATA[RD$]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="105" y="3" width="25" height="15" uuid="5cd105fd-188f-43d7-812e-20afea05b8f7"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font fontName="Verdana" isBold="true"/>
+				</textElement>
+				<text><![CDATA[RD$]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="238" y="3" width="25" height="15" uuid="b186face-6d9c-45fe-9d15-ea281ada7538"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font fontName="Verdana" isBold="true"/>
+				</textElement>
+				<text><![CDATA[RD$]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="5" y="2" width="57" height="20" uuid="6439d0fa-6247-410c-bf24-1a79d48fa060"/>
+				<textElement>
+					<font fontName="Verdana" size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{id_venta}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="130" y="2" width="79" height="20" uuid="1959d5ab-603b-4677-9ae8-213c033a7a0e"/>
+				<textElement>
+					<font fontName="Verdana" size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{costo_venta}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="265" y="2" width="100" height="20" uuid="8ba54a50-cc86-48e9-bc71-ffd7772a6b9e"/>
+				<textElement>
+					<font fontName="Verdana" size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ganancia_venta}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="389" y="2" width="74" height="20" uuid="8bc5090a-f18d-4ff7-871f-40a0b65dc39b"/>
+				<textElement>
+					<font fontName="Verdana" size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{total_venta}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="463" y="2" width="89" height="20" uuid="23f44666-e543-4e83-b7a3-7bf1bd4c35d3"/>
+				<textElement>
+					<font fontName="Verdana" size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 	<summary>
 		<band height="58">
 			<subreport>
-				<reportElement x="0" y="0" width="552" height="58" uuid="0eb05194-e271-4853-9288-370d9338d016"/>
-				<subreportParameter name="id_ventaa">
-					<subreportParameterExpression><![CDATA[$P{id_venta}]]></subreportParameterExpression>
-				</subreportParameter>
+				<reportElement x="1" y="0" width="551" height="58" uuid="ff544992-ed92-489f-b612-a157d1efea2a"/>
+				<subreportParameter name="id_ventaa"/>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "total_venta.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "total_venta_all.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
 	</summary>
