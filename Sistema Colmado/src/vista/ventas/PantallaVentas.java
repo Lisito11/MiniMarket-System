@@ -5,11 +5,14 @@ package vista.ventas;
  * @author Lisito
  */
 import bd_logica.Conexion;
+import bd_logica.DetalleVenta;
 import bd_logica.Venta;
 import com.mysql.jdbc.Connection;
 import java.awt.event.ActionEvent;
+import java.awt.event.ItemEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -37,6 +40,9 @@ public class PantallaVentas extends javax.swing.JDialog {
 
     public PantallaVentas() {
     }
+    private ArrayList<String> total_vendido;
+    private ArrayList<String> cantidad_vendida;
+    private ArrayList<String> producto;
 
     public static String idVenta = "";
     private javax.swing.JLabel backgroud;
@@ -216,9 +222,9 @@ public class PantallaVentas extends javax.swing.JDialog {
 
         jTextField1.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         getContentPane().add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 480, 190, 30));
+        mostrarProductos();
 
-        jcmbox_topProductos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Item 1", "Item 2", "Item 3", "Item 4"}));
-        jcmbox_topProductos.addActionListener(this::jcmbox_topProductos);
+        jcmbox_topProductos.addItemListener(this::jcmbox_topProductos);
         getContentPane().add(jcmbox_topProductos, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 250, 140, -1));
 
         jLabel4.setFont(new java.awt.Font("Verdana", 1, 16)); // NOI18N
@@ -251,7 +257,6 @@ public class PantallaVentas extends javax.swing.JDialog {
         jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
-
         pack();
     }
 
@@ -417,6 +422,7 @@ public class PantallaVentas extends javax.swing.JDialog {
     *  Mostrar Top 5 Productos mas Vendidos
     *  Auxiliar Opciones Venta
     *  Auxiliar filtrar busqueda
+    *  Auxiliar mostrarProductos
      */
     // Metodo - Mostrar todas las ventas
     private void mostrarVentas() {
@@ -455,6 +461,18 @@ public class PantallaVentas extends javax.swing.JDialog {
         if (jrb_totalVenta.isSelected() == true) {
             limpiarTabla();
             filtrarBusqueda("SELECT * from venta order by total_venta DESC");
+        }
+    }
+
+    //Mostrar Top 5 Productos mas Vendidos
+    private void jcmbox_topProductos(ItemEvent itemEvent) {
+        if (itemEvent.getStateChange() == ItemEvent.SELECTED) {
+            if (jcmbox_topProductos.getItemCount() > 0) {
+                String id = itemEvent.getItem().toString();
+                int pos = producto.indexOf(id);
+                jLabel5.setText("Total vendido: " + total_vendido.get(pos));
+                jLabel6.setText("Cantidad vendida: " + cantidad_vendida.get(pos));
+            }
         }
     }
 
@@ -509,7 +527,24 @@ public class PantallaVentas extends javax.swing.JDialog {
         }
     }
 
-    // Metodo - Mostrar Top 5 Productos mas Vendidos
-    private void jcmbox_topProductos(java.awt.event.ActionEvent e) {
+    // Auxiliar mostrarProductos
+    private void mostrarProductos() {
+        DetalleVenta dv = new DetalleVenta();
+        ResultSet rs = dv.TopProductos();
+
+        cantidad_vendida = new ArrayList<>();
+        total_vendido = new ArrayList<>();
+        producto = new ArrayList<>();
+
+        try {
+            while (rs.next()) {
+                jcmbox_topProductos.addItem(rs.getString("p.nombre"));
+                producto.add(rs.getString("p.nombre"));
+                cantidad_vendida.add(String.valueOf(rs.getInt("cantidad_vendida")));
+                total_vendido.add(String.valueOf(rs.getDouble("total_vendido")));
+
+            }
+        } catch (SQLException e) {
+        }
     }
 }

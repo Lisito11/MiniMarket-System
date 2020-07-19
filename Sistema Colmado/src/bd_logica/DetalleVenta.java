@@ -257,7 +257,22 @@ public class DetalleVenta extends Consultas {
     }
     
     
-
+    public ResultSet TopProductos() {
+        ResultSet datos = null;
+        try {
+            ps = (PreparedStatement) conexion.prepareStatement("select dv.id_producto,p.nombre, sum(dv.cantidad) as cantidad_vendida, sum(dv.cantidad * p.precioVenta) as total_vendido from detalle_venta dv inner join producto p on dv.id_producto = p.id_producto GROUP by dv.id_producto ORDER BY cantidad_vendida DESC LIMIT 5");
+            datos = ps.executeQuery();
+            System.out.println("CONSULTA EXITOSA");
+            System.out.println();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return datos;
+    } 
+    
+    
+    
+    
     @Override
     public boolean Agregar() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
