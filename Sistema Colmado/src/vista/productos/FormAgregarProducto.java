@@ -2,7 +2,16 @@ package vista.productos;
 
 import bd_logica.Producto;
 import java.awt.event.ActionEvent;
+import java.awt.event.ItemEvent;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
+import static javax.swing.JOptionPane.YES_NO_OPTION;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -37,10 +46,13 @@ public class FormAgregarProducto extends javax.swing.JDialog {
     private javax.swing.JLabel jlb_showGanancia;
     private javax.swing.JSpinner jsp_cantidad;
     public DefaultTableModel dtm;
+    private ArrayList<String> categorias;
+    private ArrayList<String> idcategorias;
 
     @SuppressWarnings("unchecked")
 
     private void initComponents() {
+
         jlb_agregarProducto = new javax.swing.JLabel();
         input_idProducto = new javax.swing.JTextField();
         jlb_nombreProducto = new javax.swing.JLabel();
@@ -112,7 +124,8 @@ public class FormAgregarProducto extends javax.swing.JDialog {
 
         jcb_categoria.setBackground(new java.awt.Color(255, 255, 255));
         jcb_categoria.setForeground(new java.awt.Color(0, 0, 0));
-        jcb_categoria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Item 1", "Item 2", "Item 3", "Item 4"}));
+        jcb_categoria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Categorias"}));
+        setCategorias();
         getContentPane().add(jcb_categoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 220, 150, 25));
         getContentPane().add(input_nombreProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 130, 150, 25));
         getContentPane().add(jsp_cantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 330, 130, -1));
@@ -131,6 +144,8 @@ public class FormAgregarProducto extends javax.swing.JDialog {
         btn_calcularGanancia.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         btn_calcularGanancia.setForeground(new java.awt.Color(255, 255, 255));
         btn_calcularGanancia.setText("Calcular");
+        btn_calcularGanancia.setFocusPainted(false);
+        btn_calcularGanancia.addActionListener(this::calcularGanancia);
         getContentPane().add(btn_calcularGanancia, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 430, 85, -1));
         getContentPane().add(input_precioVenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 330, 100, -1));
         getContentPane().add(input_precioCosto, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 400, 100, -1));
@@ -144,6 +159,8 @@ public class FormAgregarProducto extends javax.swing.JDialog {
         btn_atras.setForeground(new java.awt.Color(255, 255, 255));
         btn_atras.setText("Atras");
         btn_atras.setFocusPainted(false);
+        btn_atras.addActionListener(this::btn_atras);
+
         getContentPane().add(btn_atras, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, -1, -1));
 
         fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/fondo_principal.jpg"))); // NOI18N
@@ -154,19 +171,116 @@ public class FormAgregarProducto extends javax.swing.JDialog {
         setLocationRelativeTo(null);
     }
 
+    //Metodos Principales
     private void agregarProducto(ActionEvent e) {
-        if (!input_idProducto.getText().equals("")
-                || !input_nombreProducto.getText().equals("")
-                || !input_precioVenta.getText().equals("")
-                || !input_precioCosto.getText().equals("")) {
-            if (Integer.parseInt((String) jsp_cantidad.getValue()) < 0) {
+            if (!input_idProducto.getText().equals("")
+                    && !input_nombreProducto.getText().equals("")
+                    && !input_precioVenta.getText().equals("")
+                    && !input_precioCosto.getText().equals("")) {
+                if ((int) jsp_cantidad.getValue() > 0) {
+                    String venta = input_precioVenta.getText().trim();
+                    String costo = input_precioCosto.getText().trim();
+
+                    if (isDecimal(venta) && isDecimal(costo) && (Double.parseDouble(venta) > Double.parseDouble(costo))) {
+                        String categoria = (String) jcb_categoria.getSelectedItem();
+                        if (categoria != null && !categoria.equals("Categorias")) {
+                            categoria = (String) jcb_categoria.getSelectedItem();
+                            int c = categorias.indexOf(categoria);
+                            Producto p = new Producto();
+
+                            String id_producto = input_idProducto.getText().trim();
+                            String nombre = input_nombreProducto.getText().trim();
+                            venta = input_precioVenta.getText();
+                            costo = input_precioCosto.getText();
+                            int cantidad = (int) jsp_cantidad.getValue();
+                            String idc = idcategorias.get(c);
+
+                            p.setId_producto(id_producto);
+                            p.setNombre(nombre);
+                            p.setPrecioVenta(Double.parseDouble(venta));
+                            p.setPrecioCompra(Double.parseDouble(costo));
+                            p.setCantidad(cantidad);
+                            p.setIdcategoria(idc);
+                            int input = JOptionPane.showConfirmDialog(null, "Estas seguro de agregar este producto?", "Agregar Producto", YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                            if (input == 0) {
+                                if (p.Agregar()) {
+                                    JOptionPane.showMessageDialog(null, "Producto agregado correctamente");
+                                    setVisible(false);
+
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "Ha ocurrido un error al agrergar producto");
+                                }
+                            }
+
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Seleccione una categoria");
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Costo o Venta incorrecto");
+                    }
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "La cantidad del producto debe de ser mayor que 0");
+                }
             } else {
-                JOptionPane.showMessageDialog(null, "La cantidad del producto debe de ser mayor que 0");
+                JOptionPane.showMessageDialog(null, "Rellenar todos los campos");
+            }
+        
+
+    }
+
+    private void calcularGanancia(ActionEvent e) {
+        String venta = input_precioVenta.getText().trim();
+        String costo = input_precioCosto.getText().trim();
+        Double ganancia;
+        if (!venta.equals("") && !costo.equals("")) {
+            if (isDecimal(venta) && isDecimal(costo) && (Double.parseDouble(venta) > Double.parseDouble(costo))) {
+                ganancia = Double.parseDouble(venta) - Double.parseDouble(costo);
+                System.out.println(ganancia);
+                jlb_showGanancia.setText("RD$ " + String.valueOf(redondeoDecimales(ganancia)));
+            } else {
+                JOptionPane.showMessageDialog(null, "Costo o Venta incorrecto");
             }
         } else {
-            JOptionPane.showMessageDialog(null, "Rellenar todos los campos");
+            JOptionPane.showMessageDialog(null, "Digite el costo y venta");
         }
+
+    }
+
+    private void btn_atras(ActionEvent e ) {
+        setVisible(false);
     }
 
     //Metodos auxiliares
+    private static boolean isDecimal(String cadena) {
+        String patron = "^[0-9]+([.][0-9]+)?$";
+        Pattern pat = Pattern.compile(patron);
+        Matcher mat = pat.matcher(cadena);
+
+        return mat.matches();
+
+    }
+
+    public static double redondeoDecimales(double numero) {
+        BigDecimal redondeado = new BigDecimal(numero).setScale(2, RoundingMode.HALF_EVEN);
+        return redondeado.doubleValue();
+    }
+
+    private void setCategorias() {
+        Producto p = new Producto();
+        ResultSet rs = p.getCategoria();
+        categorias = new ArrayList<>();
+        idcategorias = new ArrayList<>();
+
+        try {
+            while (rs.next()) {
+                jcb_categoria.addItem(rs.getString("nombre"));
+                categorias.add(rs.getString("nombre"));
+                idcategorias.add(rs.getString("id_categoria"));
+
+            }
+        } catch (SQLException e) {
+        }
+    }
+
 }

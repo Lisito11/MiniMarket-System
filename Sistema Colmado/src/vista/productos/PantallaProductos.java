@@ -233,8 +233,11 @@ public class PantallaProductos extends javax.swing.JDialog {
     }
 
     private void btn_agregarProducto(ActionEvent e) {
-        FormAgregarProducto agregarProducto = new FormAgregarProducto(new PantallaProductos(), true);
-        agregarProducto.setVisible(true);
+        int input = JOptionPane.showConfirmDialog(null, "Desea agregar un producto?", "Agregar Producto", YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (input == 0) {
+            FormAgregarProducto agregarProducto = new FormAgregarProducto(new PantallaProductos(), true);
+            agregarProducto.setVisible(true);
+        }
 
     }
 
@@ -344,15 +347,15 @@ public class PantallaProductos extends javax.swing.JDialog {
             }
         }
     }
-    
-      private void btn_exportarProductos(ActionEvent e) {
-        int input = JOptionPane.showConfirmDialog(null, "¿Desea exportar la venta?", "Exportar Venta", YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+    private void btn_exportarProductos(ActionEvent e) {
+        int input = JOptionPane.showConfirmDialog(null, "¿Desea exportar todos los productos?", "Exportar Productos", YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         if (input == 0) {
             exportarProductos();
         }
     }
-      
-      private void exportarProductos() {
+
+    private void exportarProductos() {
         try {
             Conexion con = new Conexion();
             Connection conn = (Connection) con.getConection();

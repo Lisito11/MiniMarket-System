@@ -99,18 +99,12 @@ public class Producto extends Consultas {
             ps.setInt(5, this.cantidad);
             ps.setString(6, this.idcategoria);
             ps.execute();
-            System.err.println("Producto Agregado");
+            System.out.println("Producto Agregado");
             return true;
 
         } catch (SQLException e) {
             System.out.println(e);
             return false;
-        } finally {
-            try {
-                conexion.close();
-            } catch (SQLException e) {
-                System.err.println(e);
-            }
         }
 
     }
@@ -142,11 +136,25 @@ public class Producto extends Consultas {
             }
         }
     }
-    
-        public ResultSet getTable(String consulta) {
+
+    public ResultSet getTable(String consulta) {
         ResultSet datos = null;
         try {
             ps = (PreparedStatement) conexion.prepareStatement(consulta);
+            datos = ps.executeQuery();
+            System.out.println("CONSULTA EXITOSA");
+            System.out.println();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return datos;
+
+    }
+
+    public ResultSet getCategoria() {
+        ResultSet datos = null;
+        try {
+            ps = (PreparedStatement) conexion.prepareStatement("select nombre, id_categoria from categoria");
             datos = ps.executeQuery();
             System.out.println("CONSULTA EXITOSA");
             System.out.println();
