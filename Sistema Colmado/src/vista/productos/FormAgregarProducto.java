@@ -194,7 +194,7 @@ public class FormAgregarProducto extends javax.swing.JDialog {
                             costo = input_precioCosto.getText();
                             int cantidad = (int) jsp_cantidad.getValue();
                             String idc = idcategorias.get(c);
-
+                            
                             p.setId_producto(id_producto);
                             p.setNombre(nombre);
                             p.setPrecioVenta(Double.parseDouble(venta));
@@ -277,7 +277,6 @@ public class FormAgregarProducto extends javax.swing.JDialog {
                 jcb_categoria.addItem(rs.getString("nombre"));
                 categorias.add(rs.getString("nombre"));
                 idcategorias.add(rs.getString("id_categoria"));
-
             }
         } catch (SQLException e) {
         }
