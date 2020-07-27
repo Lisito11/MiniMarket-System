@@ -110,6 +110,8 @@ public class PantallaProductos extends javax.swing.JDialog {
         tabla_listaProductos.getColumnModel().getColumn(0).setPreferredWidth(50);
         tabla_listaProductos.getColumnModel().getColumn(5).setPreferredWidth(50);
         tabla_listaProductos.getColumnModel().getColumn(2).setPreferredWidth(50);
+        tabla_listaProductos.getColumnModel().getColumn(3).setPreferredWidth(50);
+        tabla_listaProductos.getColumnModel().getColumn(4).setPreferredWidth(50);
 
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 50, 740, 460));
         tabla_listaProductos.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -359,7 +361,7 @@ public class PantallaProductos extends javax.swing.JDialog {
         try {
             Conexion con = new Conexion();
             Connection conn = (Connection) con.getConection();
-            String nombreReporte = "productos.jasper";
+            String nombreReporte = "productos_1.jasper";
             String path = "src/reportes/" + nombreReporte;
             JasperReport reporte = null;
             reporte = (JasperReport) JRLoader.loadObjectFromFile(path);

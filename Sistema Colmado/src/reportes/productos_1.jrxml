@@ -86,23 +86,15 @@
 				<text><![CDATA[ID Producto]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="115" y="2" width="50" height="15" forecolor="#FF3300" uuid="85f36e7d-8907-4adb-9506-96f25b363f01"/>
+				<reportElement style="Column header" x="160" y="2" width="50" height="15" forecolor="#FF3300" uuid="85f36e7d-8907-4adb-9506-96f25b363f01"/>
 				<text><![CDATA[Nombre]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="358" y="2" width="59" height="15" forecolor="#FF0000" uuid="f553f0f6-83d0-48bc-bc2b-fc42fecb4c5e"/>
-				<text><![CDATA[Ganancia]]></text>
-			</staticText>
-			<staticText>
-				<reportElement style="Column header" x="216" y="3" width="37" height="15" forecolor="#FF3300" uuid="8d2d2788-ffe9-4f4c-bb77-bc948ab861fa"/>
-				<text><![CDATA[Costo]]></text>
-			</staticText>
-			<staticText>
-				<reportElement style="Column header" x="292" y="3" width="38" height="15" forecolor="#FF3300" uuid="f9d7692b-921f-4ae9-8a82-db4005aac645"/>
+				<reportElement style="Column header" x="310" y="2" width="38" height="15" forecolor="#FF3300" uuid="f9d7692b-921f-4ae9-8a82-db4005aac645"/>
 				<text><![CDATA[Venta]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="458" y="2" width="59" height="15" forecolor="#FF0000" uuid="b4f3e1dd-70d8-4643-a3fa-418e72dcc9f5"/>
+				<reportElement style="Column header" x="440" y="2" width="59" height="15" forecolor="#FF0000" uuid="b4f3e1dd-70d8-4643-a3fa-418e72dcc9f5"/>
 				<text><![CDATA[Categoria]]></text>
 			</staticText>
 		</band>
@@ -116,39 +108,18 @@
 				</graphicElement>
 			</rectangle>
 			<staticText>
-				<reportElement x="216" y="2" width="24" height="15" uuid="aa0635cd-4ed8-4711-839f-f64a7b9ac906"/>
-				<textElement textAlignment="Right" verticalAlignment="Top">
-					<font fontName="Verdana" size="9" isBold="false"/>
-				</textElement>
-				<text><![CDATA[RD$]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="293" y="2" width="24" height="15" uuid="8d5e46c7-030b-407d-bd7f-c067b743f19a"/>
-				<textElement textAlignment="Right" verticalAlignment="Top">
-					<font fontName="Verdana" size="9" isBold="false"/>
-				</textElement>
-				<text><![CDATA[RD$]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="358" y="2" width="24" height="15" uuid="8bf292c1-90ab-47eb-9598-288dd95530dc"/>
+				<reportElement x="295" y="2" width="24" height="15" uuid="8d5e46c7-030b-407d-bd7f-c067b743f19a"/>
 				<textElement textAlignment="Right" verticalAlignment="Top">
 					<font fontName="Verdana" size="9" isBold="false"/>
 				</textElement>
 				<text><![CDATA[RD$]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="75" y="2" width="135" height="20" uuid="f5975d5f-4537-4c68-92ed-4689380ebaa1"/>
+				<reportElement x="119" y="2" width="135" height="20" uuid="f5975d5f-4537-4c68-92ed-4689380ebaa1"/>
 				<textElement>
 					<font fontName="Verdana" size="9" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{np}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="240" y="2" width="53" height="15" uuid="fdf60058-c77e-493b-9ff5-41e6384c29b9"/>
-				<textElement>
-					<font fontName="Verdana" size="9" isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{costo}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="5" y="3" width="60" height="19" uuid="d7f4c4c4-2529-4a35-90dd-d8c54d9ab1a0"/>
@@ -158,21 +129,14 @@
 				<textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="437" y="2" width="118" height="20" uuid="dac77a95-cde8-4288-9ad2-429cf7969361"/>
+				<reportElement x="425" y="2" width="118" height="20" uuid="dac77a95-cde8-4288-9ad2-429cf7969361"/>
 				<textElement>
 					<font fontName="Verdana" size="9" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nc}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="385" y="2" width="73" height="15" uuid="82e8ca39-f8e5-42d1-bf4f-feb38ce5a4bb"/>
-				<textElement>
-					<font fontName="Verdana" size="9" isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{ganancia}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="318" y="2" width="54" height="15" uuid="60f8c6cb-f870-4e9f-917c-9a65e8e4c20c"/>
+				<reportElement x="320" y="2" width="54" height="15" uuid="60f8c6cb-f870-4e9f-917c-9a65e8e4c20c"/>
 				<textElement>
 					<font fontName="Verdana" size="9" isBold="false"/>
 				</textElement>

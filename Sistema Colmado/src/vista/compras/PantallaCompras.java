@@ -2,7 +2,9 @@ package vista.compras;
 
 import java.awt.event.ActionEvent;
 import javax.swing.JFrame;
-import vista.PantallaPrincipal;
+import javax.swing.JOptionPane;
+import static javax.swing.JOptionPane.YES_NO_OPTION;
+
 
 /**
  *
@@ -13,9 +15,12 @@ public class PantallaCompras extends javax.swing.JDialog {
     public PantallaCompras(JFrame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        
 
     }
+    public PantallaCompras() {
+    }
+    
+    
     
     private javax.swing.JLabel background;
     private javax.swing.JLabel background_contado;
@@ -151,6 +156,8 @@ public class PantallaCompras extends javax.swing.JDialog {
         btn_agregarFacturaContado.setForeground(new java.awt.Color(255, 255, 255));
         btn_agregarFacturaContado.setText("Agregar Factura");
         btn_agregarFacturaContado.setFocusPainted(false);
+        btn_agregarFacturaContado.addActionListener(this::btn_AgregarFacturaContado);
+
         jPanel1.add(btn_agregarFacturaContado, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 250, 270, -1));
 
         rbton_montoContado.setFont(new java.awt.Font("Verdana", 0, 16)); // NOI18N
@@ -163,38 +170,38 @@ public class PantallaCompras extends javax.swing.JDialog {
         tabla_facturasContado.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         tabla_facturasContado.setForeground(new java.awt.Color(255, 255, 255));
         tabla_facturasContado.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "ID Factura", "Proveedor", "Fecha", "Total"
-            }
+                new Object[][]{
+                    {null, null, null, null},
+                    {null, null, null, null},
+                    {null, null, null, null},
+                    {null, null, null, null},
+                    {null, null, null, null},
+                    {null, null, null, null},
+                    {null, null, null, null},
+                    {null, null, null, null},
+                    {null, null, null, null},
+                    {null, null, null, null},
+                    {null, null, null, null},
+                    {null, null, null, null},
+                    {null, null, null, null},
+                    {null, null, null, null},
+                    {null, null, null, null},
+                    {null, null, null, null},
+                    {null, null, null, null},
+                    {null, null, null, null},
+                    {null, null, null, null},
+                    {null, null, null, null}
+                },
+                new String[]{
+                    "ID Factura", "Proveedor", "Fecha", "Total"
+                }
         ) {
-            boolean[] canEdit = new boolean [] {
+            boolean[] canEdit = new boolean[]{
                 false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
+                return canEdit[columnIndex];
             }
         });
         tabla_facturasContado.getTableHeader().setReorderingAllowed(false);
@@ -237,31 +244,31 @@ public class PantallaCompras extends javax.swing.JDialog {
 
         tabla_facturasCredito.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         tabla_facturasCredito.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "ID Factura", "Proveedor", "Fecha", "Total"
-            }
+                new Object[][]{
+                    {null, null, null, null},
+                    {null, null, null, null},
+                    {null, null, null, null},
+                    {null, null, null, null},
+                    {null, null, null, null},
+                    {null, null, null, null},
+                    {null, null, null, null},
+                    {null, null, null, null},
+                    {null, null, null, null},
+                    {null, null, null, null},
+                    {null, null, null, null},
+                    {null, null, null, null},
+                    {null, null, null, null},
+                    {null, null, null, null},
+                    {null, null, null, null},
+                    {null, null, null, null},
+                    {null, null, null, null},
+                    {null, null, null, null},
+                    {null, null, null, null},
+                    {null, null, null, null}
+                },
+                new String[]{
+                    "ID Factura", "Proveedor", "Fecha", "Total"
+                }
         ));
         tabla_facturasCredito.getTableHeader().setReorderingAllowed(false);
         jScrollPane2.setViewportView(tabla_facturasCredito);
@@ -343,20 +350,26 @@ public class PantallaCompras extends javax.swing.JDialog {
         setJMenuBar(jMenuBar1);
 
         pack();
-    }                    
+    }
 
     private void rbton_montoContadoActionPerformed(ActionEvent e) {
         // TODO add your handling code here:
-    }                                                  
+    }
 
     private void btn_buscarFacturasContadoActionPerformed(ActionEvent e) {
         // TODO add your handling code here:
-    }                                                         
+    }
 
     private void btn_atrasActionPerformed(ActionEvent e) {
         setVisible(false);
-    }                                         
+    }
 
-    
-    
+    private void btn_AgregarFacturaContado(ActionEvent e) {
+        int input = JOptionPane.showConfirmDialog(null, "¿Desea agregar una Factura?", "Agregar Factura", YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (input == 0) {
+            AgregarFactura af = new AgregarFactura(new PantallaCompras(), true);
+            af.setVisible(true);
+        }
+    }
+
 }
