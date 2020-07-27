@@ -151,7 +151,7 @@ public class FormDetalleVenta extends javax.swing.JDialog {
             dtm.removeRow(fila);
 
             //AQUI VA LA PARTE DE QUITAR UN PRODUCTO A LA BASE DE DATOS
-            dv.Eliminar(nombre, cantidad, hora);
+            dv.Eliminar(nombre, cantidad, hora, idVenta);
             System.out.println(nombre);
             System.out.println(hora);
             System.out.println(cantidad);

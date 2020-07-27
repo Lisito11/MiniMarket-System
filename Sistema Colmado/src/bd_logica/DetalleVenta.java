@@ -62,13 +62,14 @@ public class DetalleVenta extends Consultas {
         }
     }
 
-    public boolean Eliminar(String nombre, int cnt, String hora) {
-        sql = "delete from detalle_venta where id_producto = ?  and cantidad = ? and hora_producto = ?";
+    public boolean Eliminar(String nombre, int cnt, String hora, String iddVenta) {
+        sql = "delete from detalle_venta where id_producto = ?  and cantidad = ? and hora_producto = ? and id_venta = ?";
         try {
             ps = (PreparedStatement) conexion.prepareStatement(sql);
             ps.setString(1, nombre);
             ps.setInt(2, cnt);
             ps.setString(3, hora);
+            ps.setInt(4, Integer.parseInt(iddVenta));
 
             ps.execute();
             System.out.println("Producto Elminado");

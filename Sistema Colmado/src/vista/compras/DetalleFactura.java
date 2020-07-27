@@ -1,4 +1,3 @@
-
 package vista.compras;
 
 import bd_logica.DetalleCompra;
@@ -62,11 +61,10 @@ public class DetalleFactura extends javax.swing.JDialog {
             jTable1.getColumnModel().getColumn(3).setResizable(false);
             jTable1.getColumnModel().getColumn(4).setResizable(false);
         }
-                jTable1.getColumnModel().getColumn(0).setPreferredWidth(50);
-                jTable1.getColumnModel().getColumn(2).setPreferredWidth(50);
-                jTable1.getColumnModel().getColumn(3).setPreferredWidth(50);
-                jTable1.getColumnModel().getColumn(4).setPreferredWidth(50);
-
+        jTable1.getColumnModel().getColumn(0).setPreferredWidth(50);
+        jTable1.getColumnModel().getColumn(2).setPreferredWidth(50);
+        jTable1.getColumnModel().getColumn(3).setPreferredWidth(50);
+        jTable1.getColumnModel().getColumn(4).setPreferredWidth(50);
 
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 520, 250));
 
@@ -83,7 +81,7 @@ public class DetalleFactura extends javax.swing.JDialog {
         btn_editarProducto.setBackground(new java.awt.Color(0, 102, 153));
         btn_editarProducto.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         btn_editarProducto.setForeground(new java.awt.Color(255, 255, 255));
-        btn_editarProducto.setText("Editar Producto");
+        btn_editarProducto.setText("Eliminar Producto");
         btn_editarProducto.setBorderPainted(false);
         btn_editarProducto.setFocusPainted(false);
         btn_editarProducto.addActionListener(this::btn_editarProducto);
@@ -166,10 +164,32 @@ public class DetalleFactura extends javax.swing.JDialog {
     }
 
     private void btn_editarProducto(ActionEvent e) {
+        int fila = jTable1.getSelectedRow();
+        if (fila >= 0) {
+            String idproducto = String.valueOf(dtm.getValueAt(jTable1.getSelectedRow(), 0));
+            String costoUnidad = String.valueOf(dtm.getValueAt(jTable1.getSelectedRow(), 2));
+            String cantidad = String.valueOf(dtm.getValueAt(jTable1.getSelectedRow(), 3));
+            dtm.removeRow(fila);
 
+            //AQUI VA LA PARTE DE QUITAR UN PRODUCTO A LA BASE DE DATOS
+            dc.Eliminar(idproducto, cantidad, costoUnidad, idCompra);
+            System.out.println(idproducto);
+            System.out.println(cantidad);
+            System.out.println(costoUnidad);
+        } else {
+            JOptionPane.showMessageDialog(null, "Selecciona un producto para Eliminar");
+        }
     }
 
     private void btn_Finalizar(ActionEvent e) {
+        int input = JOptionPane.showConfirmDialog(null, "¿Desea Finalizar la compra?", "Finalizar Compra", YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (input == 0) {
+            if (dc.FinalizarCompra()) {
+                setVisible(false);
+            } else {
+                JOptionPane.showMessageDialog(null, "Ha ocurrido un error.");
+            }
+        }
 
     }
 
@@ -205,40 +225,7 @@ public class DetalleFactura extends javax.swing.JDialog {
         Object[] newRow = {a, b, c, d, e};
         dtm.addRow(newRow);
     }
-    private void opcionesVenta(String idVenta) {
-        String[] opciones = {"Editar", "Eliminar"};
-        int op = JOptionPane.showOptionDialog(
-                null //componente
-                ,
-                 "¿Que quieres hacer con la venta?" // Mensaje
-                ,
-                 "Venta " + idVenta // Titulo en la barra del cuadro
-                ,
-                 JOptionPane.DEFAULT_OPTION // Tipo de opciones
-                ,
-                 JOptionPane.INFORMATION_MESSAGE // Tipo de mensaje (icono)
-                ,
-                 null // Icono (ninguno)
-                ,
-                 opciones // Opciones personalizadas
-                ,
-                 null // Opcion por defecto
-        );
-        
-         String opcion = opciones[op];
-        switch (opcion) {
-            case "Editar":
-                break;
-            case "Eliminar":
-                jTable1.getSelectedRow();
-                String id = String.valueOf(dtm.getValueAt(jTable1.getSelectedRow(), 0));
-                EliminarProducto(id);
-                break;
-            default:
-                break;
-        }
-        
-    }
+
     private javax.swing.JButton btn_agregarProducto;
     private javax.swing.JButton btn_atras;
     private javax.swing.JButton btn_editarProducto;
