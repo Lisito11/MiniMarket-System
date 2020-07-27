@@ -1,25 +1,45 @@
 
 package vista.compras;
 
+import bd_logica.DetalleCompra;
+import java.awt.event.ActionEvent;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+import static javax.swing.JOptionPane.YES_NO_OPTION;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author Lisito
  */
 public class DetalleFactura extends javax.swing.JDialog {
+
+    DetalleCompra dc = new DetalleCompra();
+    String idCompra = AgregarFactura.idCompra;
+    public DefaultTableModel dtm;
+
     public DetalleFactura(JDialog parent, boolean modal) {
         super(parent, modal);
         initComponents();
     }
 
-
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
+        String[] columnNames = {"ID Producto", "Nombre ", "Costo Unidad", "Cantidad", "Costo Total"};
+        Object[][] datos = {};
+        dtm = new DefaultTableModel(datos, columnNames) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTable1 = new JTable(dtm);
         btn_agregarProducto = new javax.swing.JButton();
         btn_editarProducto = new javax.swing.JButton();
         btn_finalizarCompra = new javax.swing.JButton();
@@ -33,22 +53,6 @@ public class DetalleFactura extends javax.swing.JDialog {
 
         jTable1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jTable1.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "ID Producto", "Nombre ", "Costo Unidad", "Cantidad", "Costo Total"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
         jTable1.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTable1);
         if (jTable1.getColumnModel().getColumnCount() > 0) {
@@ -58,6 +62,11 @@ public class DetalleFactura extends javax.swing.JDialog {
             jTable1.getColumnModel().getColumn(3).setResizable(false);
             jTable1.getColumnModel().getColumn(4).setResizable(false);
         }
+                jTable1.getColumnModel().getColumn(0).setPreferredWidth(50);
+                jTable1.getColumnModel().getColumn(2).setPreferredWidth(50);
+                jTable1.getColumnModel().getColumn(3).setPreferredWidth(50);
+                jTable1.getColumnModel().getColumn(4).setPreferredWidth(50);
+
 
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 520, 250));
 
@@ -67,6 +76,8 @@ public class DetalleFactura extends javax.swing.JDialog {
         btn_agregarProducto.setText("Agregar Producto");
         btn_agregarProducto.setBorderPainted(false);
         btn_agregarProducto.setFocusPainted(false);
+        btn_agregarProducto.addActionListener(this::btn_añadirProducto);
+
         getContentPane().add(btn_agregarProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 320, -1, -1));
 
         btn_editarProducto.setBackground(new java.awt.Color(0, 102, 153));
@@ -75,6 +86,8 @@ public class DetalleFactura extends javax.swing.JDialog {
         btn_editarProducto.setText("Editar Producto");
         btn_editarProducto.setBorderPainted(false);
         btn_editarProducto.setFocusPainted(false);
+        btn_editarProducto.addActionListener(this::btn_editarProducto);
+
         getContentPane().add(btn_editarProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 320, -1, -1));
 
         btn_finalizarCompra.setBackground(new java.awt.Color(102, 102, 0));
@@ -83,6 +96,7 @@ public class DetalleFactura extends javax.swing.JDialog {
         btn_finalizarCompra.setText("Finalizar Compra");
         btn_finalizarCompra.setBorderPainted(false);
         btn_finalizarCompra.setFocusPainted(false);
+        btn_finalizarCompra.addActionListener(this::btn_Finalizar);
         getContentPane().add(btn_finalizarCompra, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 320, -1, -1));
 
         btn_atras.setBackground(new java.awt.Color(255, 0, 51));
@@ -91,6 +105,8 @@ public class DetalleFactura extends javax.swing.JDialog {
         btn_atras.setText("Atras");
         btn_atras.setBorderPainted(false);
         btn_atras.setFocusPainted(false);
+        btn_atras.addActionListener(this::btn_Atras);
+
         getContentPane().add(btn_atras, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
 
         jLabel1.setForeground(new java.awt.Color(204, 204, 204));
@@ -101,11 +117,128 @@ public class DetalleFactura extends javax.swing.JDialog {
         getContentPane().add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 560, 400));
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    }
 
-   
+    private void btn_añadirProducto(ActionEvent e) {
+        try {
+            String idproducto = JOptionPane.showInputDialog("Introduzca el ID del producto");
+            while (idproducto.equals("") || !dc.VerificarProducto(idproducto)) {
+                JOptionPane.showMessageDialog(null, "Introduce un ID de producto valido");
+                idproducto = JOptionPane.showInputDialog("Introduzca el ID del producto");
+            }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+            String costoUnidad = JOptionPane.showInputDialog("Introduzca el costo del producto");
+            while (costoUnidad.equals("") || !isDecimal(costoUnidad)) {
+                JOptionPane.showMessageDialog(null, "Introduzca un costo valido");
+                costoUnidad = JOptionPane.showInputDialog("Introduzca el costo del producto");
+            }
+
+            String cantidad = JOptionPane.showInputDialog("Introduzca la cantidad del producto");
+            while (cantidad.equals("") || !ValidarCantidad(cantidad) || Integer.parseInt(cantidad) < 0) {
+                JOptionPane.showMessageDialog(null, "Introduce una cantidad valida");
+                cantidad = JOptionPane.showInputDialog("Introduzca la cantidad del producto");
+            }
+
+            double cu = Double.parseDouble(costoUnidad);
+            int c = Integer.parseInt(cantidad);
+            String costoTotal = String.valueOf(c * cu);
+
+            //PENDIENTE AGREGAR PRODUCTO 
+            dc.setIdCompra(Integer.parseInt(idCompra));
+            dc.setIdProducto(idproducto);
+            dc.setCostoUnidad(costoUnidad);
+            dc.setCantidad(Integer.parseInt(cantidad));
+            ResultSet rs = dc.getNombreProducto();
+            String nombre = "";
+            if (rs.next()) {
+                nombre = rs.getString("nombre");
+                System.out.println(nombre);
+            }
+            if (dc.Agregar()) {
+                setFila(idproducto, nombre, costoUnidad, cantidad, costoTotal);
+                JOptionPane.showMessageDialog(null, "Producto Agregado Correctamente");
+            } else {
+                JOptionPane.showMessageDialog(null, "Ha ocurrido un error ");
+            }
+        } catch (SQLException eq) {
+            System.out.println(eq);
+        }
+    }
+
+    private void btn_editarProducto(ActionEvent e) {
+
+    }
+
+    private void btn_Finalizar(ActionEvent e) {
+
+    }
+
+    private void btn_Atras(ActionEvent e) {
+        int input = JOptionPane.showConfirmDialog(null, "¿Estas seguro que quieres irte?", "Regresar", YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (input == 0) {
+            setVisible(false);
+        }
+    }
+
+    // Metodo - Auxiliar Validar Cantidad
+    public boolean ValidarCantidad(String c) {
+        String numCuenta = c;
+        int NOnum = 0;
+        for (int i = 0; i < numCuenta.length(); i++) {
+            if (!Character.isDigit(numCuenta.charAt(i))) {
+                NOnum++;
+            }
+        }
+        return NOnum == 0;
+    }
+
+    private static boolean isDecimal(String cadena) {
+        String patron = "^[0-9]+([.][0-9]+)?$";
+        Pattern pat = Pattern.compile(patron);
+        Matcher mat = pat.matcher(cadena);
+
+        return mat.matches();
+
+    }
+
+    public void setFila(String a, String b, String c, String d, String e) {
+        Object[] newRow = {a, b, c, d, e};
+        dtm.addRow(newRow);
+    }
+    private void opcionesVenta(String idVenta) {
+        String[] opciones = {"Editar", "Eliminar"};
+        int op = JOptionPane.showOptionDialog(
+                null //componente
+                ,
+                 "¿Que quieres hacer con la venta?" // Mensaje
+                ,
+                 "Venta " + idVenta // Titulo en la barra del cuadro
+                ,
+                 JOptionPane.DEFAULT_OPTION // Tipo de opciones
+                ,
+                 JOptionPane.INFORMATION_MESSAGE // Tipo de mensaje (icono)
+                ,
+                 null // Icono (ninguno)
+                ,
+                 opciones // Opciones personalizadas
+                ,
+                 null // Opcion por defecto
+        );
+        
+         String opcion = opciones[op];
+        switch (opcion) {
+            case "Editar":
+                break;
+            case "Eliminar":
+                jTable1.getSelectedRow();
+                String id = String.valueOf(dtm.getValueAt(jTable1.getSelectedRow(), 0));
+                EliminarProducto(id);
+                break;
+            default:
+                break;
+        }
+        
+    }
     private javax.swing.JButton btn_agregarProducto;
     private javax.swing.JButton btn_atras;
     private javax.swing.JButton btn_editarProducto;
@@ -114,5 +247,4 @@ public class DetalleFactura extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
-    // End of variables declaration//GEN-END:variables
 }
