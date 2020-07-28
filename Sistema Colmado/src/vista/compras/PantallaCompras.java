@@ -1,10 +1,30 @@
 package vista.compras;
 
+import bd_logica.Compra;
+import bd_logica.Conexion;
+import bd_logica.Venta;
+import com.mysql.jdbc.Connection;
 import java.awt.event.ActionEvent;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.YES_NO_OPTION;
-
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
+import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
+import vista.ventas.PantallaVentas;
 
 /**
  *
@@ -15,20 +35,20 @@ public class PantallaCompras extends javax.swing.JDialog {
     public PantallaCompras(JFrame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-
+        mostrarCompras1();
+        mostrarCompras2();
     }
+
     public PantallaCompras() {
     }
-    
-    
-    
+
     private javax.swing.JLabel background;
     private javax.swing.JLabel background_contado;
     private javax.swing.JButton btn_agregarFacturaContado;
     private javax.swing.JButton btn_agregarFacturaCredito;
     private javax.swing.JButton btn_atras;
-    private javax.swing.JButton btn_avanzadoContado;
-    private javax.swing.JButton btn_avanzadoCredito;
+    private javax.swing.JButton btn_exportarContado;
+    private javax.swing.JButton btn_exportarCredito;
     private javax.swing.JButton btn_buscarFacturasContado;
     private javax.swing.JButton btn_buscarFacturasCredito;
     private javax.swing.JButton btn_exportarFacturaContado;
@@ -60,10 +80,28 @@ public class PantallaCompras extends javax.swing.JDialog {
     private javax.swing.JRadioButton rbton_proveedorCredito;
     private javax.swing.JTable tabla_facturasContado;
     private javax.swing.JTable tabla_facturasCredito;
+    public DefaultTableModel dtm1;
+    public DefaultTableModel dtm2;
 
     @SuppressWarnings("unchecked")
     private void initComponents() {
+        String[] columnNames = {"ID Factura", "Proveedor", "Fecha", "Total"};
+        Object[][] datos = {};
+        dtm1 = new DefaultTableModel(datos, columnNames) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
 
+        String[] columnNames2 = {"ID Factura", "Proveedor", "Fecha", "Total"};
+        Object[][] datos2 = {};
+        dtm2 = new DefaultTableModel(datos2, columnNames2) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
         buttonGroup1 = new javax.swing.ButtonGroup();
         buttonGroup2 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
@@ -78,14 +116,14 @@ public class PantallaCompras extends javax.swing.JDialog {
         btn_agregarFacturaContado = new javax.swing.JButton();
         rbton_montoContado = new javax.swing.JRadioButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tabla_facturasContado = new javax.swing.JTable();
-        btn_avanzadoContado = new javax.swing.JButton();
+        tabla_facturasContado = new JTable(dtm1);
+        btn_exportarContado = new javax.swing.JButton();
         btn_atras = new javax.swing.JButton();
         background_contado = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        tabla_facturasCredito = new javax.swing.JTable();
+        tabla_facturasCredito = new JTable(dtm2);
         btn_agregarFacturaCredito = new javax.swing.JButton();
         btn_exportarFacturaCredito = new javax.swing.JButton();
         btn_buscarFacturasCredito = new javax.swing.JButton();
@@ -95,7 +133,7 @@ public class PantallaCompras extends javax.swing.JDialog {
         rbton_montoCredito = new javax.swing.JRadioButton();
         rbton_fechaCredito = new javax.swing.JRadioButton();
         rbton_idCredito = new javax.swing.JRadioButton();
-        btn_avanzadoCredito = new javax.swing.JButton();
+        btn_exportarCredito = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         background = new javax.swing.JLabel();
@@ -108,6 +146,26 @@ public class PantallaCompras extends javax.swing.JDialog {
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        buttonGroup1.add(rbton_proveedorContado);
+        buttonGroup1.add(rbton_fechaContado);
+        buttonGroup1.add(rbton_idContado);
+        buttonGroup1.add(rbton_montoContado);
+
+        buttonGroup2.add(rbton_proveedorCredito);
+        buttonGroup2.add(rbton_fechaCredito);
+        buttonGroup2.add(rbton_idCredito);
+        buttonGroup2.add(rbton_montoCredito);
+
+        rbton_proveedorContado.addActionListener(this::ordernarPor);
+        rbton_fechaContado.addActionListener(this::ordernarPor);
+        rbton_idContado.addActionListener(this::ordernarPor);
+        rbton_montoContado.addActionListener(this::ordernarPor);
+
+        rbton_proveedorCredito.addActionListener(this::ordernarPor);
+        rbton_fechaCredito.addActionListener(this::ordernarPor);
+        rbton_idCredito.addActionListener(this::ordernarPor);
+        rbton_montoCredito.addActionListener(this::ordernarPor);
+
         jLabel1.setBackground(new java.awt.Color(255, 255, 255));
         jLabel1.setFont(new java.awt.Font("Verdana", 1, 20)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
@@ -119,14 +177,16 @@ public class PantallaCompras extends javax.swing.JDialog {
         btn_buscarFacturasContado.setForeground(new java.awt.Color(255, 255, 255));
         btn_buscarFacturasContado.setText("Buscar");
         btn_buscarFacturasContado.setFocusPainted(false);
-        btn_buscarFacturasContado.addActionListener(this::btn_buscarFacturasContadoActionPerformed);
+        btn_buscarFacturasContado.addActionListener(this::btn_buscarFacturasContado);
         jPanel1.add(btn_buscarFacturasContado, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 40, 77, -1));
 
         btn_exportarFacturaContado.setBackground(new java.awt.Color(0, 102, 153));
         btn_exportarFacturaContado.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
         btn_exportarFacturaContado.setForeground(new java.awt.Color(255, 255, 255));
-        btn_exportarFacturaContado.setText("Exportar Factura");
+        btn_exportarFacturaContado.setText("Exportar una Factura");
         btn_exportarFacturaContado.setFocusPainted(false);
+        btn_exportarFacturaContado.addActionListener(this::btn_exportarUnaCompra);
+
         jPanel1.add(btn_exportarFacturaContado, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 250, 280, -1));
         jPanel1.add(input_facturaContado, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 40, 130, 30));
 
@@ -163,47 +223,9 @@ public class PantallaCompras extends javax.swing.JDialog {
         rbton_montoContado.setFont(new java.awt.Font("Verdana", 0, 16)); // NOI18N
         rbton_montoContado.setForeground(new java.awt.Color(255, 255, 255));
         rbton_montoContado.setText("Por monto");
-        rbton_montoContado.addActionListener(this::rbton_montoContadoActionPerformed);
         jPanel1.add(rbton_montoContado, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 110, 170, 30));
 
         tabla_facturasContado.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        tabla_facturasContado.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
-        tabla_facturasContado.setForeground(new java.awt.Color(255, 255, 255));
-        tabla_facturasContado.setModel(new javax.swing.table.DefaultTableModel(
-                new Object[][]{
-                    {null, null, null, null},
-                    {null, null, null, null},
-                    {null, null, null, null},
-                    {null, null, null, null},
-                    {null, null, null, null},
-                    {null, null, null, null},
-                    {null, null, null, null},
-                    {null, null, null, null},
-                    {null, null, null, null},
-                    {null, null, null, null},
-                    {null, null, null, null},
-                    {null, null, null, null},
-                    {null, null, null, null},
-                    {null, null, null, null},
-                    {null, null, null, null},
-                    {null, null, null, null},
-                    {null, null, null, null},
-                    {null, null, null, null},
-                    {null, null, null, null},
-                    {null, null, null, null}
-                },
-                new String[]{
-                    "ID Factura", "Proveedor", "Fecha", "Total"
-                }
-        ) {
-            boolean[] canEdit = new boolean[]{
-                false, false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit[columnIndex];
-            }
-        });
         tabla_facturasContado.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tabla_facturasContado);
         if (tabla_facturasContado.getColumnModel().getColumnCount() > 0) {
@@ -212,15 +234,32 @@ public class PantallaCompras extends javax.swing.JDialog {
             tabla_facturasContado.getColumnModel().getColumn(2).setResizable(false);
             tabla_facturasContado.getColumnModel().getColumn(3).setResizable(false);
         }
+        tabla_facturasContado.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    System.out.println("Se ha hecho doble click");
+                    int fila = tabla_facturasContado.getSelectedRow();
+                    if (fila >= 0) {
+                        //
 
+                        //pendiente
+                        //
+                    }
+                }
+            }
+        });
+        tabla_facturasContado.getColumnModel().getColumn(0).setPreferredWidth(30);
+        tabla_facturasContado.getColumnModel().getColumn(3).setPreferredWidth(30);
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 560, 200));
 
-        btn_avanzadoContado.setBackground(new java.awt.Color(102, 102, 0));
-        btn_avanzadoContado.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
-        btn_avanzadoContado.setForeground(new java.awt.Color(255, 255, 255));
-        btn_avanzadoContado.setText("Busqueda Avanzada");
-        btn_avanzadoContado.setFocusPainted(false);
-        jPanel1.add(btn_avanzadoContado, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 250, 200, -1));
+        btn_exportarContado.setBackground(new java.awt.Color(102, 102, 0));
+        btn_exportarContado.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
+        btn_exportarContado.setForeground(new java.awt.Color(255, 255, 255));
+        btn_exportarContado.setText("Exportar Facturas");
+        btn_exportarContado.setFocusPainted(false);
+        btn_exportarContado.addActionListener(this::btn_exportarAllCompras);
+        jPanel1.add(btn_exportarContado, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 250, 200, -1));
 
         btn_atras.setBackground(new java.awt.Color(255, 0, 51));
         btn_atras.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
@@ -243,36 +282,34 @@ public class PantallaCompras extends javax.swing.JDialog {
         jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 10, -1, -1));
 
         tabla_facturasCredito.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        tabla_facturasCredito.setModel(new javax.swing.table.DefaultTableModel(
-                new Object[][]{
-                    {null, null, null, null},
-                    {null, null, null, null},
-                    {null, null, null, null},
-                    {null, null, null, null},
-                    {null, null, null, null},
-                    {null, null, null, null},
-                    {null, null, null, null},
-                    {null, null, null, null},
-                    {null, null, null, null},
-                    {null, null, null, null},
-                    {null, null, null, null},
-                    {null, null, null, null},
-                    {null, null, null, null},
-                    {null, null, null, null},
-                    {null, null, null, null},
-                    {null, null, null, null},
-                    {null, null, null, null},
-                    {null, null, null, null},
-                    {null, null, null, null},
-                    {null, null, null, null}
-                },
-                new String[]{
-                    "ID Factura", "Proveedor", "Fecha", "Total"
-                }
-        ));
+
         tabla_facturasCredito.getTableHeader().setReorderingAllowed(false);
         jScrollPane2.setViewportView(tabla_facturasCredito);
 
+        if (tabla_facturasCredito.getColumnModel().getColumnCount() > 0) {
+            tabla_facturasCredito.getColumnModel().getColumn(0).setResizable(false);
+            tabla_facturasCredito.getColumnModel().getColumn(1).setResizable(false);
+            tabla_facturasCredito.getColumnModel().getColumn(2).setResizable(false);
+            tabla_facturasCredito.getColumnModel().getColumn(3).setResizable(false);
+        }
+        tabla_facturasCredito.getColumnModel().getColumn(0).setPreferredWidth(30);
+        tabla_facturasCredito.getColumnModel().getColumn(3).setPreferredWidth(30);
+
+        tabla_facturasCredito.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    System.out.println("Se ha hecho doble click");
+                    int fila = tabla_facturasCredito.getSelectedRow();
+                    if (fila >= 0) {
+                        //
+
+                        //pendiente
+                        //
+                    }
+                }
+            }
+        });
         jPanel2.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 560, 210));
 
         btn_agregarFacturaCredito.setBackground(new java.awt.Color(0, 102, 153));
@@ -285,7 +322,7 @@ public class PantallaCompras extends javax.swing.JDialog {
         btn_exportarFacturaCredito.setBackground(new java.awt.Color(0, 102, 153));
         btn_exportarFacturaCredito.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
         btn_exportarFacturaCredito.setForeground(new java.awt.Color(255, 255, 255));
-        btn_exportarFacturaCredito.setText("Exportar Factura");
+        btn_exportarFacturaCredito.setText("Exportar una Factura");
         btn_exportarFacturaCredito.setFocusPainted(false);
         jPanel2.add(btn_exportarFacturaCredito, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 260, 280, -1));
 
@@ -294,6 +331,8 @@ public class PantallaCompras extends javax.swing.JDialog {
         btn_buscarFacturasCredito.setForeground(new java.awt.Color(255, 255, 255));
         btn_buscarFacturasCredito.setText("Buscar");
         btn_buscarFacturasCredito.setFocusPainted(false);
+        btn_buscarFacturasCredito.addActionListener(this::btn_buscarFacturasCredito);
+
         jPanel2.add(btn_buscarFacturasCredito, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 40, -1, -1));
         jPanel2.add(input_facturaCredito, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 40, 130, 30));
 
@@ -322,12 +361,12 @@ public class PantallaCompras extends javax.swing.JDialog {
         rbton_idCredito.setText("Por ID");
         jPanel2.add(rbton_idCredito, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 200, 150, 30));
 
-        btn_avanzadoCredito.setBackground(new java.awt.Color(102, 102, 0));
-        btn_avanzadoCredito.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
-        btn_avanzadoCredito.setForeground(new java.awt.Color(255, 255, 255));
-        btn_avanzadoCredito.setText("Busqueda Avanzada");
-        btn_avanzadoCredito.setFocusPainted(false);
-        jPanel2.add(btn_avanzadoCredito, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 260, 200, -1));
+        btn_exportarCredito.setBackground(new java.awt.Color(102, 102, 0));
+        btn_exportarCredito.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
+        btn_exportarCredito.setForeground(new java.awt.Color(255, 255, 255));
+        btn_exportarCredito.setText("Exportar Facturas");
+        btn_exportarCredito.setFocusPainted(false);
+        jPanel2.add(btn_exportarCredito, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 260, 200, -1));
 
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/fondo_principal.jpg"))); // NOI18N
         jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 800, 310));
@@ -350,14 +389,39 @@ public class PantallaCompras extends javax.swing.JDialog {
         setJMenuBar(jMenuBar1);
 
         pack();
+
+    }
+// Metodo - Exportar Venta
+
+    private void btn_exportarUnaCompra(ActionEvent e) {
+        int fila = tabla_facturasContado.getSelectedRow();
+        if (fila >= 0) {
+            int input = JOptionPane.showConfirmDialog(null, "¿Desea exportar la compra?", "Exportar Comprar", YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if (input == 0) {
+                tabla_facturasContado.getSelectedRow();
+                String id = String.valueOf(dtm1.getValueAt(tabla_facturasContado.getSelectedRow(), 0));
+                exportarCompra(id);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Seleccione una venta para Exportar");
+        }
+
     }
 
-    private void rbton_montoContadoActionPerformed(ActionEvent e) {
-        // TODO add your handling code here:
+    // Metodo - Exportar Todas Las Ventas 
+    private void btn_exportarAllCompras(ActionEvent e) {
+        int input = JOptionPane.showConfirmDialog(null, "¿Desea exportar todas las Compras?", "Exportar Compras", YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (input == 0) {
+            exportarAllCompras();
+        }
     }
 
-    private void btn_buscarFacturasContadoActionPerformed(ActionEvent e) {
-        // TODO add your handling code here:
+    private void btn_buscarFacturasContado(ActionEvent e) {
+        btn_buscarCompras(input_facturaContado, tabla_facturasContado);
+    }
+
+    private void btn_buscarFacturasCredito(ActionEvent e) {
+        btn_buscarCompras(input_facturaCredito, tabla_facturasCredito);
     }
 
     private void btn_atrasActionPerformed(ActionEvent e) {
@@ -369,6 +433,175 @@ public class PantallaCompras extends javax.swing.JDialog {
         if (input == 0) {
             AgregarFactura af = new AgregarFactura(new PantallaCompras(), true);
             af.setVisible(true);
+        }
+    }
+
+    private void mostrarCompras1() {
+        Compra c = new Compra();
+        ResultSet rs = c.getTable("select c.id_compra, p.nombreEmpresa,c.fecha_compra, c.total_costo from compra c inner join proveedor p on p.id_proveedor = c.id_proveedor");
+        try {
+            while (rs.next()) {
+                dtm1.addRow(new Object[]{rs.getString("c.id_compra"), rs.getString("p.nombreEmpresa"), rs.getString("c.fecha_compra"), rs.getString("c.total_costo")});
+
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+
+    private void mostrarCompras2() {
+        Compra c = new Compra();
+        ResultSet rs = c.getTable("select c.id_compra, p.nombreEmpresa,c.fecha_compra, c.total_costo from compra c inner join proveedor p on p.id_proveedor = c.id_proveedor");
+        try {
+            while (rs.next()) {
+                dtm2.addRow(new Object[]{rs.getString("c.id_compra"), rs.getString("p.nombreEmpresa"), rs.getString("c.fecha_compra"), rs.getString("c.total_costo")});
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+
+        }
+    }
+
+    private void ordernarPor(ActionEvent e) {
+
+        // Ordenar por Proveedor
+        if (rbton_proveedorContado.isSelected() == true) {
+            limpiarTabla(dtm1);
+            filtrarBusqueda("select c.id_compra, p.nombreEmpresa,c.fecha_compra, c.total_costo from compra c inner join proveedor p on p.id_proveedor = c.id_proveedor order by p.nombreEmpresa ASC", dtm1);
+        }
+
+        // Ordenar por Fecha
+        if (rbton_fechaContado.isSelected() == true) {
+            limpiarTabla(dtm1);
+            filtrarBusqueda("select c.id_compra, p.nombreEmpresa,c.fecha_compra, c.total_costo from compra c inner join proveedor p on p.id_proveedor = c.id_proveedor order by c.fecha_compra ASC", dtm1);
+        }
+
+        // Ordenar por id
+        if (rbton_idContado.isSelected() == true) {
+            limpiarTabla(dtm1);
+            filtrarBusqueda("select c.id_compra, p.nombreEmpresa,c.fecha_compra, c.total_costo from compra c inner join proveedor p on p.id_proveedor = c.id_proveedor order by c.id_compra ASC", dtm1);
+        }
+
+        // Ordenar Costo
+        if (rbton_montoContado.isSelected() == true) {
+            limpiarTabla(dtm1);
+            filtrarBusqueda("select c.id_compra, p.nombreEmpresa,c.fecha_compra, c.total_costo from compra c inner join proveedor p on p.id_proveedor = c.id_proveedor order by c.total_costo DESC", dtm1);
+        }
+
+        //Facturas a credito
+        // Ordenar por Proveedor
+        if (rbton_proveedorCredito.isSelected() == true) {
+            limpiarTabla(dtm2);
+            filtrarBusqueda("select c.id_compra, p.nombreEmpresa,c.fecha_compra, c.total_costo from compra c inner join proveedor p on p.id_proveedor = c.id_proveedor order by p.nombreEmpresa ASC", dtm2);
+        }
+
+        // Ordenar por Fecha
+        if (rbton_fechaCredito.isSelected() == true) {
+            limpiarTabla(dtm2);
+            filtrarBusqueda("select c.id_compra, p.nombreEmpresa,c.fecha_compra, c.total_costo from compra c inner join proveedor p on p.id_proveedor = c.id_proveedor order by c.fecha_compra ASC", dtm2);
+        }
+
+        // Ordenar por id
+        if (rbton_idCredito.isSelected() == true) {
+            limpiarTabla(dtm2);
+            filtrarBusqueda("select c.id_compra, p.nombreEmpresa,c.fecha_compra, c.total_costo from compra c inner join proveedor p on p.id_proveedor = c.id_proveedor order by c.id_compra ASC", dtm2);
+        }
+
+        // Ordenar Costo
+        if (rbton_montoCredito.isSelected() == true) {
+            limpiarTabla(dtm2);
+            filtrarBusqueda("select c.id_compra, p.nombreEmpresa,c.fecha_compra, c.total_costo from compra c inner join proveedor p on p.id_proveedor = c.id_proveedor order by c.total_costo DESC", dtm2);
+        }
+    }
+
+    private void filtrarBusqueda(String filtro, DefaultTableModel dtm) {
+        Venta v = new Venta();
+        ResultSet rs = v.getTable(filtro);
+        try {
+            while (rs.next()) {
+                dtm.addRow(new Object[]{rs.getString("c.id_compra"), rs.getString("p.nombreEmpresa"), rs.getString("c.fecha_compra"), rs.getString("c.total_costo")});
+            }
+        } catch (SQLException c) {
+        }
+    }
+
+    private void limpiarTabla(DefaultTableModel dtm) {
+        int a = dtm.getRowCount() - 1;
+        for (int i = a; i >= 0; i--) {
+            dtm.removeRow(i);
+        }
+    }
+
+    private void btn_buscarCompras(JTextField factura, JTable tabla) {
+        boolean bandera = true;
+        String busqueda = factura.getText();
+        if (busqueda.equals("")) {
+            JOptionPane.showMessageDialog(null, "Introducir Fecha o ID de la Compra");
+        } else {
+            //Seleccionar la fila dentro del jtable1
+            for (int i = 0; i < tabla.getRowCount(); i++) {
+
+                //Buscamos por Fecha Venta
+                if (String.valueOf(tabla.getValueAt(i, 2)).trim().equals(busqueda)) {
+                    tabla.changeSelection(i, 1, false, false);
+                    bandera = true;
+
+                    factura.setText("");
+                    break;
+
+                } //Buscamos por ID venta
+                else if (String.valueOf(tabla.getValueAt(i, 0)).trim().equals(busqueda)) {
+                    tabla.changeSelection(i, 0, false, false);
+                    bandera = true;
+
+                    factura.setText("");
+                    break;
+                }
+                bandera = false;
+            }
+            if (!bandera) {
+                JOptionPane.showMessageDialog(null, "Esta Compra no existe");
+            }
+        }
+    }
+// Metodo - Auxiliar exportar todas las compras
+
+    private void exportarAllCompras() {
+        try {
+            Conexion con = new Conexion();
+            Connection conn = (Connection) con.getConection();
+            String nombreReporte = "allCompras.jasper";
+            String path = "src/reportes/" + nombreReporte;
+            JasperReport reporte = null;
+            reporte = (JasperReport) JRLoader.loadObjectFromFile(path);
+            JasperPrint jprint = JasperFillManager.fillReport(reporte, null, conn);
+            JasperViewer view = new JasperViewer(jprint, false);
+            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            view.setVisible(true);
+
+        } catch (JRException ex) {
+            Logger.getLogger(PantallaCompras.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex.getMessage());
+        }
+    }
+
+    private void exportarCompra(String idCompra) {
+        try {
+            Conexion con = new Conexion();
+            Connection conn = (Connection) con.getConection();
+            String nombreReporte = "compra.jasper";
+            String path = "src/reportes/" + nombreReporte;
+            JasperReport reporte = null;
+            Map parametro = new HashMap();
+            parametro.put("id_compra", Integer.parseInt(idCompra));
+            reporte = (JasperReport) JRLoader.loadObjectFromFile(path);
+            JasperPrint jprint = JasperFillManager.fillReport(reporte, parametro, conn);
+            JasperViewer view = new JasperViewer(jprint, false);
+            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            view.setVisible(true);
+
+        } catch (JRException ex) {
+            Logger.getLogger(PantallaCompras.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

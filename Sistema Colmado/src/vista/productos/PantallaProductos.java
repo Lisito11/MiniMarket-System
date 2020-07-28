@@ -2,7 +2,6 @@ package vista.productos;
 
 import bd_logica.Conexion;
 import bd_logica.Producto;
-import bd_logica.Venta;
 import com.mysql.jdbc.Connection;
 import java.awt.event.ActionEvent;
 import javax.swing.JFrame;
@@ -22,7 +21,6 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.view.JasperViewer;
 import vista.ventas.PantallaVentas;
-import static vista.ventas.PantallaVentas.idVenta;
 
 /**
  *
