@@ -9,6 +9,7 @@ import bd_logica.DetalleVenta;
 import bd_logica.Venta;
 import com.mysql.jdbc.Connection;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -30,7 +31,7 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.view.JasperViewer;
 
-public class PantallaVentas extends javax.swing.JDialog {
+public class PantallaVentas extends javax.swing.JDialog implements ActionListener {
 
     public PantallaVentas(JFrame parent, boolean modal) {
         super(parent, modal);
@@ -59,6 +60,8 @@ public class PantallaVentas extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenuItem regresar;
+    private javax.swing.JMenuItem exportarVenta;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JRadioButton jrb_costoVenta;
@@ -105,10 +108,12 @@ public class PantallaVentas extends javax.swing.JDialog {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
+        regresar = new javax.swing.JMenuItem();
+        exportarVenta = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
+        setTitle("Pantalla Ventas");
         jTable1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jTable1.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jTable1.getTableHeader().setReorderingAllowed(false);
@@ -251,9 +256,17 @@ public class PantallaVentas extends javax.swing.JDialog {
         getContentPane().add(backgroud, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 755, 580));
 
         jMenu1.setText("Inicio");
+        regresar.setText("Regresar");
+        regresar.addActionListener(this);
+        jMenu1.add(regresar);
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Ventas");
+        exportarVenta.setText("Exportar Venta");
+        exportarVenta.addActionListener(this);
+
+        jMenu2.add(exportarVenta);
+
         jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
@@ -545,6 +558,28 @@ public class PantallaVentas extends javax.swing.JDialog {
 
             }
         } catch (SQLException e) {
+        }
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+
+        if (e.getSource() == regresar) {
+            setVisible(false);
+        }
+        if (e.getSource() == exportarVenta) {
+            int fila = jTable1.getSelectedRow();
+            if (fila >= 0) {
+                int input = JOptionPane.showConfirmDialog(null, "¿Desea exportar la venta?", "Exportar Venta", YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                if (input == 0) {
+                    jTable1.getSelectedRow();
+                    String id = String.valueOf(dtm.getValueAt(jTable1.getSelectedRow(), 0));
+                    exportarVenta(id);
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Seleccione una venta para Exportar");
+            }
+
         }
     }
 }

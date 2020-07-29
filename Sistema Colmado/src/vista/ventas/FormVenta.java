@@ -51,7 +51,7 @@ public class FormVenta extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
+        setTitle("Agregando Venta");
         btn_crearVenta.setBackground(new java.awt.Color(0, 102, 153));
         btn_crearVenta.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         btn_crearVenta.setForeground(new java.awt.Color(255, 255, 255));

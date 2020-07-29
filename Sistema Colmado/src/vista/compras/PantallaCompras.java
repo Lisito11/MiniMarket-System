@@ -5,6 +5,7 @@ import bd_logica.Conexion;
 import bd_logica.Venta;
 import com.mysql.jdbc.Connection;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -26,13 +27,14 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.view.JasperViewer;
-import vista.ventas.PantallaVentas;
+import vista.productos.FormAgregarProducto;
+import vista.productos.PantallaProductos;
 
 /**
  *
  * @author Lisito
  */
-public class PantallaCompras extends javax.swing.JDialog {
+public class PantallaCompras extends javax.swing.JDialog implements ActionListener {
 
     public PantallaCompras(JFrame parent, boolean modal) {
         super(parent, modal);
@@ -84,6 +86,12 @@ public class PantallaCompras extends javax.swing.JDialog {
     private javax.swing.JTable tabla_facturasCredito;
     public DefaultTableModel dtm1;
     public DefaultTableModel dtm2;
+    private javax.swing.JMenuItem regresar;
+    private javax.swing.JMenuItem compraAgregarCo;
+    private javax.swing.JMenuItem compraAgregarCe;
+
+    private javax.swing.JMenuItem compraExportarCo;
+    private javax.swing.JMenuItem compraExportarCe;
 
     @SuppressWarnings("unchecked")
     private void initComponents() {
@@ -104,6 +112,12 @@ public class PantallaCompras extends javax.swing.JDialog {
                 return false;
             }
         };
+        regresar = new javax.swing.JMenuItem();
+        compraAgregarCo = new javax.swing.JMenuItem();
+        compraExportarCo = new javax.swing.JMenuItem();
+        compraAgregarCe = new javax.swing.JMenuItem();
+        compraExportarCe = new javax.swing.JMenuItem();
+
         buttonGroup1 = new javax.swing.ButtonGroup();
         buttonGroup2 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
@@ -145,7 +159,7 @@ public class PantallaCompras extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
+        setTitle("Pantalla Compras");
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         buttonGroup1.add(rbton_proveedorContado);
@@ -389,10 +403,29 @@ public class PantallaCompras extends javax.swing.JDialog {
         background.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/fondo_principal.jpg"))); // NOI18N
         getContentPane().add(background, new org.netbeans.lib.awtextra.AbsoluteConstraints(-9, -4, 820, 665));
 
-        jMenu1.setText("File");
+        jMenu1.setText("Inicio");
+        regresar.setText("Regresar");
+        regresar.addActionListener(this);
+
+        jMenu1.add(regresar);
         jMenuBar1.add(jMenu1);
 
-        jMenu2.setText("Edit");
+        jMenu2.setText("Compras");
+
+        compraAgregarCo.setText("Agregar Factura Credito");
+        compraExportarCo.setText("Exportar Factura Credito");
+        compraAgregarCe.setText("Agregar Factura Contado");
+        compraExportarCe.setText("Exportar Factura Contado");
+        compraAgregarCo.addActionListener(this);
+        compraExportarCo.addActionListener(this);
+        compraAgregarCe.addActionListener(this);
+        compraExportarCe.addActionListener(this);
+
+        jMenu2.add(compraAgregarCo);
+        jMenu2.add(compraExportarCo);
+        jMenu2.add(compraExportarCe);
+        jMenu2.add(compraAgregarCe);
+
         jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
@@ -400,7 +433,7 @@ public class PantallaCompras extends javax.swing.JDialog {
         pack();
 
     }
-// Metodo - Exportar Venta
+// Metodo - Exportar Compra
 
     private void btn_exportarUnaCompra(ActionEvent e) {
         int fila = tabla_facturasContado.getSelectedRow();
@@ -416,7 +449,7 @@ public class PantallaCompras extends javax.swing.JDialog {
 
     }
 
-    // Metodo - Exportar Todas Las Ventas 
+    // Metodo - Exportar Todas Las Compras
     private void btn_exportarAllCompras(ActionEvent e) {
         int input = JOptionPane.showConfirmDialog(null, "¿Desea exportar todas las Compras?", "Exportar Compras", YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         if (input == 0) {
@@ -669,7 +702,7 @@ public class PantallaCompras extends javax.swing.JDialog {
         c.setIdCompra(Integer.parseInt(id));
         String porPagar = String.valueOf(dtm2.getValueAt(tabla_facturasCredito.getSelectedRow(), 4));
         String pago = JOptionPane.showInputDialog(null, "Pagar la Cuenta", porPagar);
-        
+
         while (pago.equals("") || !isDecimal(pago) || Double.parseDouble(pago) > Double.parseDouble(porPagar) || Double.parseDouble(pago) < 0) {
             JOptionPane.showMessageDialog(null, "Introduce un pago correcto");
             pago = JOptionPane.showInputDialog("Pagar: " + porPagar, porPagar);
@@ -679,7 +712,7 @@ public class PantallaCompras extends javax.swing.JDialog {
             c.PagarFacturaCredito(pago);
         }
     }
-    
+
     private static boolean isDecimal(String cadena) {
         String patron = "^[0-9]+([.][0-9]+)?$";
         Pattern pat = Pattern.compile(patron);
@@ -706,6 +739,51 @@ public class PantallaCompras extends javax.swing.JDialog {
             }
         } else {
             JOptionPane.showMessageDialog(null, "Seleccione una Compra para Exportar");
+        }
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == regresar) {
+            setVisible(false);
+        }
+        if (e.getSource() == compraAgregarCo) {
+            int input = JOptionPane.showConfirmDialog(null, "¿Desea agregar una Factura?", "Agregar Factura", YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if (input == 0) {
+                AgregarFactura_Credito af = new AgregarFactura_Credito(new PantallaCompras(), true);
+                af.setVisible(true);
+            }
+        }
+        if (e.getSource() == compraExportarCo) {
+            int fila = tabla_facturasCredito.getSelectedRow();
+            if (fila >= 0) {
+                int input = JOptionPane.showConfirmDialog(null, "¿Desea exportar la compra?", "Exportar Comprar", YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                if (input == 0) {
+                    String id = String.valueOf(dtm2.getValueAt(tabla_facturasCredito.getSelectedRow(), 0));
+                    exportarCompra(id, "compraCredito");
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Seleccione una Compra para Exportar");
+            }
+        }
+        if (e.getSource() == compraAgregarCe) {
+            int input = JOptionPane.showConfirmDialog(null, "¿Desea agregar una Factura?", "Agregar Factura", YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if (input == 0) {
+                AgregarFactura af = new AgregarFactura(new PantallaCompras(), true);
+                af.setVisible(true);
+            }
+        }
+        if (e.getSource() == compraExportarCe) {
+            int fila = tabla_facturasContado.getSelectedRow();
+            if (fila >= 0) {
+                int input = JOptionPane.showConfirmDialog(null, "¿Desea exportar la compra?", "Exportar Comprar", YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                if (input == 0) {
+                    String id = String.valueOf(dtm1.getValueAt(tabla_facturasContado.getSelectedRow(), 0));
+                    exportarCompra(id, "compra");
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Seleccione una Compra para Exportar");
+            }
         }
     }
 

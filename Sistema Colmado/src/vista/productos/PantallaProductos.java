@@ -4,6 +4,7 @@ import bd_logica.Conexion;
 import bd_logica.Producto;
 import com.mysql.jdbc.Connection;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -26,7 +27,7 @@ import vista.ventas.PantallaVentas;
  *
  * @author Lisito
  */
-public class PantallaProductos extends javax.swing.JDialog {
+public class PantallaProductos extends javax.swing.JDialog implements ActionListener {
 
     public PantallaProductos(JFrame parent, boolean modal) {
         super(parent, modal);
@@ -56,6 +57,9 @@ public class PantallaProductos extends javax.swing.JDialog {
     private javax.swing.JRadioButton rbtn_ordenarPrecioCompra;
     private javax.swing.JRadioButton rbtn_ordenarPrecioVenta;
     private javax.swing.JTable tabla_listaProductos;
+    private javax.swing.JMenuItem regresar;
+    private javax.swing.JMenuItem agregarProductoo;
+
     public DefaultTableModel dtm;
 
     @SuppressWarnings("unchecked")
@@ -68,6 +72,8 @@ public class PantallaProductos extends javax.swing.JDialog {
                 return false;
             }
         };
+        regresar = new javax.swing.JMenuItem();
+        agregarProductoo = new javax.swing.JMenuItem();
         buttonGroup1 = new javax.swing.ButtonGroup();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabla_listaProductos = new JTable(dtm);
@@ -91,7 +97,7 @@ public class PantallaProductos extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
+        setTitle("Pantalla Productos");
         tabla_listaProductos.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         tabla_listaProductos.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N 
         tabla_listaProductos.getTableHeader().setReorderingAllowed(false);
@@ -213,10 +219,18 @@ public class PantallaProductos extends javax.swing.JDialog {
         background.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/fondo_principal.jpg"))); // NOI18N
         getContentPane().add(background, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 800, 670));
 
-        jMenu1.setText("File");
+        jMenu1.setText("Inicio");
+        regresar.setText("Regresar");
+        regresar.addActionListener(this);
+        jMenu1.add(regresar);
         jMenuBar1.add(jMenu1);
 
-        jMenu2.setText("Edit");
+        
+        jMenu2.setText("Productos");
+        agregarProductoo.setText("Agregar Producto");
+        agregarProductoo.addActionListener(this);
+
+        jMenu2.add(agregarProductoo);
         jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
@@ -371,6 +385,20 @@ public class PantallaProductos extends javax.swing.JDialog {
         } catch (JRException ex) {
             Logger.getLogger(PantallaVentas.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println(ex.getMessage());
+        }
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == regresar) {
+            setVisible(false);
+        }
+        if (e.getSource() == agregarProductoo) {
+            int input = JOptionPane.showConfirmDialog(null, "Desea agregar un producto?", "Agregar Producto", YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if (input == 0) {
+                FormAgregarProducto agregarProducto = new FormAgregarProducto(new PantallaProductos(), true);
+                agregarProducto.setVisible(true);
+            }
         }
     }
 

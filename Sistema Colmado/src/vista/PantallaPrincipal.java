@@ -1,10 +1,12 @@
 package vista;
 
 import vista.compras.PantallaCompras;
-import vista.ventas.PantallaVentas;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import vista.productos.PantallaProductos;
 import vista.ventas.PantallaVentas;
 
@@ -12,7 +14,7 @@ import vista.ventas.PantallaVentas;
  *
  * @author Lisito
  */
-public class PantallaPrincipal extends javax.swing.JFrame {
+public class PantallaPrincipal extends javax.swing.JFrame implements ActionListener {
 
     public PantallaPrincipal() {
         initComponents();
@@ -24,7 +26,6 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     }
 
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPanel4 = new javax.swing.JPanel();
@@ -51,20 +52,26 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
+        jMenuItem5 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
+        irProductos = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
-        jMenu5 = new javax.swing.JMenu();
+        irVentas = new javax.swing.JMenuItem();
+        cerrar_sistema = new javax.swing.JMenu();
+        jMenuItem6 = new javax.swing.JMenuItem();
         jMenu6 = new javax.swing.JMenu();
+        creador = new javax.swing.JMenuItem();
+        sistema = new javax.swing.JMenuItem();
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
+                jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 100, Short.MAX_VALUE)
         );
         jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
+                jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 100, Short.MAX_VALUE)
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -88,11 +95,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         btn_entrarCompras.setText("Entrar");
         btn_entrarCompras.setBorderPainted(false);
         btn_entrarCompras.setFocusPainted(false);
-        btn_entrarCompras.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_entrarComprasActionPerformed(evt);
-            }
-        });
+        btn_entrarCompras.addActionListener(this::btn_entrarComprasActionPerformed);
         jPanel1.add(btn_entrarCompras, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 320, 210, 80));
 
         fondo_compras.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/tarjetas_img.jpg"))); // NOI18N
@@ -115,11 +118,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         btn_entrarProductos.setForeground(new java.awt.Color(255, 255, 255));
         btn_entrarProductos.setText("Entrar");
         btn_entrarProductos.setFocusPainted(false);
-        btn_entrarProductos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_entrarProductosActionPerformed(evt);
-            }
-        });
+        btn_entrarProductos.addActionListener(this::btn_entrarProductosActionPerformed);
         jPanel2.add(btn_entrarProductos, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 320, 210, 80));
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/tarjetas_img.jpg"))); // NOI18N
@@ -141,11 +140,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         btn_entrarVentas.setFont(new java.awt.Font("Verdana", 1, 36)); // NOI18N
         btn_entrarVentas.setForeground(new java.awt.Color(255, 255, 255));
         btn_entrarVentas.setText("Entrar");
-        btn_entrarVentas.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_entrarVentasActionPerformed(evt);
-            }
-        });
+        btn_entrarVentas.addActionListener(this::btn_entrarVentasActionPerformed);
         jPanel3.add(btn_entrarVentas, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 320, 210, 80));
 
         fondo_facturasv.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/tarjetas_img.jpg"))); // NOI18N
@@ -164,6 +159,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         btn_agregarProovedor.setForeground(new java.awt.Color(255, 255, 255));
         btn_agregarProovedor.setText("Agregar Proveedor");
         btn_agregarProovedor.setFocusPainted(false);
+        btn_agregarProovedor.addActionListener(this::btn_agregarProovedorActionPerformed);
         getContentPane().add(btn_agregarProovedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 20, 190, 40));
 
         btn_agregarUsuario.setBackground(new java.awt.Color(255, 51, 0));
@@ -171,6 +167,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         btn_agregarUsuario.setForeground(new java.awt.Color(255, 255, 255));
         btn_agregarUsuario.setText("Agregar Usuario");
         btn_agregarUsuario.setFocusPainted(false);
+        btn_agregarUsuario.addActionListener(this::btn_agregarUsuarioActionPerformed);
         getContentPane().add(btn_agregarUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 20, 190, 40));
 
         autor.setForeground(new java.awt.Color(204, 204, 204));
@@ -185,41 +182,86 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Compras");
+
+        jMenuItem5.setText("Ir a Compras");
+        jMenuItem5.addActionListener(this);
+
+        jMenu2.add(jMenuItem5);
         jMenuBar1.add(jMenu2);
 
         jMenu3.setText("Productos");
+
+        irProductos.setText("Ir a Productos");
+        irProductos.addActionListener(this);
+
+        jMenu3.add(irProductos);
+
         jMenuBar1.add(jMenu3);
 
         jMenu4.setText("Ventas");
+
+        irVentas.setText("Ir a Ventas");
+        irVentas.addActionListener(this);
+
+        jMenu4.add(irVentas);
+
         jMenuBar1.add(jMenu4);
 
-        jMenu5.setText("Opciones");
-        jMenuBar1.add(jMenu5);
+        cerrar_sistema.setText("Opciones");
+
+        jMenuItem6.setText("Cerrar Sistema");
+        jMenuItem6.addActionListener(this);
+
+        cerrar_sistema.add(jMenuItem6);
+
+        jMenuBar1.add(cerrar_sistema);
 
         jMenu6.setText("Acerca de");
+
+        creador.setText("Creador");
+        creador.addActionListener(this);
+
+        jMenu6.add(creador);
+
+        sistema.setText("Sistema");
+        sistema.addActionListener(this);
+
+        jMenu6.add(sistema);
+
         jMenuBar1.add(jMenu6);
 
         setJMenuBar(jMenuBar1);
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    }
 
-    private void btn_entrarProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_entrarProductosActionPerformed
-        PantallaProductos pp = new PantallaProductos(new PantallaPrincipal(),false);
+    private void btn_entrarProductosActionPerformed(java.awt.event.ActionEvent evt) {
+        PantallaProductos pp = new PantallaProductos(new PantallaPrincipal(), false);
         pp.setVisible(true);
-        //PantallaCompras.iniciar();
-    }//GEN-LAST:event_btn_entrarProductosActionPerformed
+    }
 
-    private void btn_entrarComprasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_entrarComprasActionPerformed
-        PantallaCompras pc = new PantallaCompras(new PantallaPrincipal(),false);
+    private void btn_entrarComprasActionPerformed(java.awt.event.ActionEvent evt) {
+        PantallaCompras pc = new PantallaCompras(new PantallaPrincipal(), false);
         pc.setVisible(true);
-    }//GEN-LAST:event_btn_entrarComprasActionPerformed
+    }
 
-    private void btn_entrarVentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_entrarVentasActionPerformed
-        PantallaVentas pv = new PantallaVentas(new PantallaPrincipal(),false);
+    private void btn_entrarVentasActionPerformed(java.awt.event.ActionEvent evt) {
+        PantallaVentas pv = new PantallaVentas(new PantallaPrincipal(), false);
         pv.setVisible(true);
 
-	}//GEN-LAST:event_btn_entrarVentasActionPerformed
+    }
+
+    private void btn_agregarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//EN-FIR:event_btn_agregarUsuarioActionPerformed
+        AgregarUsuario au = new AgregarUsuario(new PantallaPrincipal(), true);
+        au.setVisible(true);
+
+    }
+
+    private void btn_agregarProovedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIT:event_btn_agregarProovedorActionPerformed
+        AgregarProveedor ap = new AgregarProveedor(new PantallaPrincipal(), true);
+        ap.setVisible(true);
+    }
+
     public static void iniciar() {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -237,8 +279,6 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         });
     }
 
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel autor;
     public static javax.swing.JLabel benvenida_txt;
     private javax.swing.JButton btn_agregarProovedor;
@@ -246,12 +286,16 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btn_entrarCompras;
     private javax.swing.JButton btn_entrarProductos;
     private javax.swing.JButton btn_entrarVentas;
+    private javax.swing.JMenu cerrar_sistema;
+    private javax.swing.JMenuItem creador;
     private javax.swing.JLabel fondo;
     private javax.swing.JLabel fondo_compras;
     private javax.swing.JLabel fondo_facturasv;
     private javax.swing.JLabel fondo_productos;
     private javax.swing.JLabel img_compra;
     private javax.swing.JLabel img_ventas;
+    private javax.swing.JMenuItem irProductos;
+    private javax.swing.JMenuItem irVentas;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -260,14 +304,16 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
-    private javax.swing.JMenu jMenu5;
     private javax.swing.JMenu jMenu6;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    // End of variables declaration//GEN-END:variables
+    private javax.swing.JMenuItem sistema;
+
     String nombre = Login.texto;
     ImageIcon icono_principal;
     private ImageIcon img, img2, img3;
@@ -289,4 +335,33 @@ public class PantallaPrincipal extends javax.swing.JFrame {
 
     }
 
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == creador) {
+            JOptionPane.showMessageDialog(null, "El creador es: Lisanny A. Peña G.\nEmail: l.andrespg11@gmail.com");
+        }
+        if (e.getSource() == sistema) {
+            JOptionPane.showMessageDialog(null, "Este sistema es adecuado para:\nColmados - MiniMarkets - Regueras");
+        }
+
+        if (e.getSource() == jMenuItem5) {
+            PantallaCompras pc = new PantallaCompras(new PantallaPrincipal(), false);
+            pc.setVisible(true);
+        }
+
+        if (e.getSource() == irVentas) {
+            PantallaVentas pv = new PantallaVentas(new PantallaPrincipal(), false);
+            pv.setVisible(true);
+        }
+
+        if (e.getSource() == irProductos) {
+            PantallaProductos pp = new PantallaProductos(new PantallaPrincipal(), false);
+            pp.setVisible(true);
+        }
+
+        if (e.getSource() == jMenuItem6) {
+            System.exit(-1);
+        }
+
+    }
 }

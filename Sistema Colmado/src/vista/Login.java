@@ -5,6 +5,10 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import bd_logica.Usuario;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -26,7 +30,7 @@ public class Login extends javax.swing.JFrame {
     private Icon icono, icono2;
     public static String texto = "";
     private ImageIcon icono_principal;
-    
+
     //Metodo donde se inicializan los componentes
     private void initComponents() {
         txt_usuario = new javax.swing.JTextField();
@@ -42,7 +46,7 @@ public class Login extends javax.swing.JFrame {
         txt_usuario.setFont(new java.awt.Font("Verdana", 0, 16)); // NOI18N
         txt_usuario.setForeground(new java.awt.Color(102, 102, 102));
         txt_usuario.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        txt_usuario.setText("Lisanny Andres");
+        txt_usuario.setText("lisanny11@hotmail.com");
         txt_usuario.setAutoscrolls(false);
         txt_usuario.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, null, java.awt.Color.green, java.awt.Color.green, null));
         txt_usuario.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
@@ -82,7 +86,7 @@ public class Login extends javax.swing.JFrame {
         getContentPane().add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 450, 550));
         setTitle("Login - MiniMarket System");
         pack();
-        
+
         // Agregando la imagen del fondo y El logo
         img = new ImageIcon("src/imagenes/fondo_login.png");
         img2 = new ImageIcon("src/imagenes/logo.png");
@@ -94,7 +98,7 @@ public class Login extends javax.swing.JFrame {
         setIconImage(icono_principal.getImage());
         setResizable(false);
         setLocationRelativeTo(null);
-        
+
     }
 
     //Metodo para validar los datos de sesión y ingresar al programa principal
@@ -102,25 +106,31 @@ public class Login extends javax.swing.JFrame {
         Usuario user = new Usuario();
         String pass = txt_password.getText();
         if (!txt_usuario.getText().equals("") && !pass.equals("")) {
-            user.setUsuario(txt_usuario.getText().trim());
-            user.setPassword(pass);
-            if (user.ComprobarUsuario(user)) {
-                txt_password.setText("");
-                texto = txt_usuario.getText();
-                setVisible(false);
-                PantallaPrincipal pp = new PantallaPrincipal();
-                pp.setVisible(true);
-
-            } else {
-                JOptionPane.showMessageDialog(null, "Datos incorrectos");
+            try {
+                user.setEmail(txt_usuario.getText().trim());
+                user.setPassword(pass);
+                ResultSet rs = user.getNombreUsuario();
+                if (rs.next()) {
+                    texto = rs.getString("nombre");
+                }
+                if (user.ComprobarUsuario()) {
+                    txt_password.setText("");
+                    setVisible(false);
+                    PantallaPrincipal pp = new PantallaPrincipal();
+                    pp.setVisible(true);
+                    
+                } else {
+                    JOptionPane.showMessageDialog(null, "Datos incorrectos");
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
             JOptionPane.showMessageDialog(null, "Rellene todos los campos");
         }
 
     }
-    
-    
+
     //METODO MAIN PARA INICIAR LA APLICACION
     public static void main(String args[]) {
         try {
@@ -137,5 +147,5 @@ public class Login extends javax.swing.JFrame {
             new Login().setVisible(true);
         });
     }
-    
+
 }
