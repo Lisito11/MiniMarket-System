@@ -17,9 +17,9 @@ public class FormVenta extends javax.swing.JDialog {
         initComponents();
 
     }
-    
-    public FormVenta(){
-    
+
+    public FormVenta() {
+
     }
 
     public javax.swing.JButton btn_crearVenta;
@@ -111,7 +111,6 @@ public class FormVenta extends javax.swing.JDialog {
     *  Regresar al Menu Principal
     *
      */
-    
     // Metodo - Crear Venta
     private void btn_crearVenta(ActionEvent e) {
         if (!input_idVenta.getText().equals("") && !input_fechaVenta.getText().equals("") && !input_idAdministrador.getText().equals("")) {
@@ -119,11 +118,11 @@ public class FormVenta extends javax.swing.JDialog {
             venta.setIdVenta(Integer.parseInt(input_idVenta.getText()));
             venta.setFechaVenta(input_fechaVenta.getText());
             venta.setIdAdministrador(input_idAdministrador.getText());
-            if (venta.AgregarVenta(venta)) {
+            if (venta.Agregar()) {
                 idVenta = input_idVenta.getText();
                 setVisible(false);
-                 FormDetalleVenta fdv = new FormDetalleVenta(new FormVenta(), false);
-                 fdv.setVisible(true);
+                FormDetalleVenta fdv = new FormDetalleVenta(new FormVenta(), false);
+                fdv.setVisible(true);
 
             } else {
                 JOptionPane.showMessageDialog(null, "Ha ocurrido un problema, ¡Verificar Datos!");

@@ -1,6 +1,5 @@
 package bd_logica;
 
-import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
@@ -11,11 +10,9 @@ import vista.Login;
  *
  * @author Lisito
  */
-public class Usuario extends Consultas {
+public class Usuario extends Conexion {
 
-    PreparedStatement ps = null;
-    Connection conexion = (Connection) getConection();
-    String sql;
+
     Login login;
     private String usuario;
     private String password;
@@ -116,9 +113,6 @@ public class Usuario extends Consultas {
         }
     }
 
-    @Override
-    public boolean Editar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    
 
 }

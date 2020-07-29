@@ -1,9 +1,7 @@
 package vista.compras;
 
 import bd_logica.Compra;
-import bd_logica.Conexion;
 import bd_logica.Venta;
-import com.mysql.jdbc.Connection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
@@ -27,8 +25,7 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.view.JasperViewer;
-import vista.productos.FormAgregarProducto;
-import vista.productos.PantallaProductos;
+import java.sql.DriverManager;
 
 /**
  *
@@ -45,7 +42,7 @@ public class PantallaCompras extends javax.swing.JDialog implements ActionListen
 
     public PantallaCompras() {
     }
-
+    private java.sql.Connection conn;
     private javax.swing.JLabel background;
     private javax.swing.JLabel background_contado;
     private javax.swing.JButton btn_agregarFacturaContado;
@@ -621,8 +618,11 @@ public class PantallaCompras extends javax.swing.JDialog implements ActionListen
 
     private void exportarAllCompras(String factura) {
         try {
-            Conexion con = new Conexion();
-            Connection conn = (Connection) con.getConection();
+            try {
+                conn = DriverManager.getConnection("jdbc:mysql://localhost/db_colmado", "root", "");
+            } catch (SQLException ex) {
+                Logger.getLogger(PantallaCompras.class.getName()).log(Level.SEVERE, null, ex);
+            }
             String nombreReporte = factura + ".jasper";
             String path = "src/reportes/" + nombreReporte;
             JasperReport reporte = null;
@@ -640,8 +640,11 @@ public class PantallaCompras extends javax.swing.JDialog implements ActionListen
 
     private void exportarCompra(String idCompra, String factura) {
         try {
-            Conexion con = new Conexion();
-            Connection conn = (Connection) con.getConection();
+            try {
+                conn = DriverManager.getConnection("jdbc:mysql://localhost/db_colmado", "root", "");
+            } catch (SQLException ex) {
+                Logger.getLogger(PantallaCompras.class.getName()).log(Level.SEVERE, null, ex);
+            }
             String nombreReporte = factura + ".jasper";
             String path = "src/reportes/" + nombreReporte;
             JasperReport reporte = null;

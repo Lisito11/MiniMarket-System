@@ -2,7 +2,6 @@ package vista.productos;
 
 import bd_logica.Producto;
 import java.awt.event.ActionEvent;
-import java.awt.event.ItemEvent;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.ResultSet;

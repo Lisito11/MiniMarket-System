@@ -101,49 +101,7 @@ public class EditarVenta extends javax.swing.JDialog {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
                 if (e.getClickCount() == 2) {
-                    /*System.out.println("Se ha hecho doble click");
-                    int fila = jTable1.getSelectedRow();
-                    if (fila >= 0) {
-                        // VIEJOS VALORES
-                        String nombreE = String.valueOf(dtm.getValueAt(jTable1.getSelectedRow(), 0));
-                        String horaE = String.valueOf(dtm.getValueAt(jTable1.getSelectedRow(), 1));
-                        String cantidadE = String.valueOf(dtm.getValueAt(jTable1.getSelectedRow(), 2));
-
-                        //NUEVOS VALORES
-                        //Validando id producto
-                        String nombre = JOptionPane.showInputDialog("Introduzca el id producto nuevo", nombreE);
-                        while (nombre.equals("") || !dv.VerificarProducto(nombre)) {
-                            JOptionPane.showMessageDialog(null, "Introduce un ID de producto valido");
-                            nombre = JOptionPane.showInputDialog("Introduzca el ID del producto");
-                        }
-                        //Validando hora
-                        String hora = JOptionPane.showInputDialog("Introduzca el hora del producto");
-                        while (hora.equals("") || !ValidarHora(hora)) {
-                            JOptionPane.showMessageDialog(null, "Introduce una hora valida (hh:mm)");
-                            hora = JOptionPane.showInputDialog("Introduzca el hora del producto");
-                        }
-
-                        //Validando la cantidad introducida del producto
-                        String cantidad = JOptionPane.showInputDialog("Introduzca el nuevo lugar", cantidadE);
-                        while (cantidad.equals("") || !ValidarCantidad(cantidad) || Integer.parseInt(cantidad) < 0) {
-                            JOptionPane.showMessageDialog(null, "Introduce una cantidad valida");
-                            cantidad = JOptionPane.showInputDialog("Introduzca la cantidad del producto");
-                        }
-
-                        if (dv.EditarProducto(nombre, hora, cantidad, nombreE, horaE, cantidadE)) {
-                            JOptionPane.showMessageDialog(null, "Producto Actualizado");
-                            dtm.setValueAt(nombre, fila, 0);
-                            dtm.setValueAt(hora, fila, 1);
-                            dtm.setValueAt(cantidad, fila, 2);
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Ha ocurrido un error.");
-
-                        }
-
-                    }*/
-
                     JOptionPane.showMessageDialog(null, "No esta permitido editar el productoF");
-
                 }
             }
         });
@@ -183,14 +141,6 @@ public class EditarVenta extends javax.swing.JDialog {
             cantidad = JOptionPane.showInputDialog("Introduzca la cantidad del producto");
         }
 
-        //AQUI VA PARA AGREGARLO A LA BASE DE DATOS
-        /*dv.setIdProducto(idproducto);
-        dv.setIdVenta(Integer.parseInt(idVenta));
-        dv.setCantidad(Integer.parseInt(cantidad));
-        dv.setFechaProducto(hora);
-        dv.Agregar(dv);*/
-
-        //Colocando producto en la tabla
         setFila(idproducto, hora, cantidad);
 
         System.out.println(idproducto);
@@ -241,12 +191,7 @@ public class EditarVenta extends javax.swing.JDialog {
         }
 
         setVisible(false);
-        /*if (dv.FinalizarVenta(idVenta)) {
-            System.out.println("Finalizado");
-            setVisible(false);
-        } else {
-            JOptionPane.showMessageDialog(null, "Ha ocurrido un error.");
-        }*/
+        
     }
 
 //------------------------------------------------------------------------------  

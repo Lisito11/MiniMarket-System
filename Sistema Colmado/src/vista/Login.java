@@ -28,7 +28,7 @@ public class Login extends javax.swing.JFrame {
     public javax.swing.JTextField txt_usuario;
     private ImageIcon img, img2;
     private Icon icono, icono2;
-    public static String texto = "";
+    public static String usuario = "";
     private ImageIcon icono_principal;
 
     //Metodo donde se inicializan los componentes
@@ -111,7 +111,7 @@ public class Login extends javax.swing.JFrame {
                 user.setPassword(pass);
                 ResultSet rs = user.getNombreUsuario();
                 if (rs.next()) {
-                    texto = rs.getString("nombre");
+                    usuario = rs.getString("nombre");
                 }
                 if (user.ComprobarUsuario()) {
                     txt_password.setText("");

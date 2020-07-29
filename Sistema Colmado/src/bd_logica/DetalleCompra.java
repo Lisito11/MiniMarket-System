@@ -8,7 +8,7 @@ import java.sql.SQLException;
  *
  * @author Lisito
  */
-public class DetalleCompra extends Consultas {
+public class DetalleCompra extends Conexion {
 
     private int idCompra;
     private String idProducto;
@@ -172,9 +172,6 @@ public class DetalleCompra extends Consultas {
         }
     }
 
-    @Override
-    public boolean Editar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    
 
 }

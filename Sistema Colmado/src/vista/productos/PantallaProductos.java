@@ -1,8 +1,6 @@
 package vista.productos;
 
-import bd_logica.Conexion;
 import bd_logica.Producto;
-import com.mysql.jdbc.Connection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JFrame;
@@ -22,6 +20,7 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.view.JasperViewer;
 import vista.ventas.PantallaVentas;
+import java.sql.DriverManager;
 
 /**
  *
@@ -37,6 +36,7 @@ public class PantallaProductos extends javax.swing.JDialog implements ActionList
 
     public PantallaProductos() {
     }
+    private java.sql.Connection conn;
     private javax.swing.JLabel background;
     public javax.swing.JButton btn_agregarProducto;
     private javax.swing.JButton btn_atras;
@@ -225,7 +225,6 @@ public class PantallaProductos extends javax.swing.JDialog implements ActionList
         jMenu1.add(regresar);
         jMenuBar1.add(jMenu1);
 
-        
         jMenu2.setText("Productos");
         agregarProductoo.setText("Agregar Producto");
         agregarProductoo.addActionListener(this);
@@ -371,8 +370,11 @@ public class PantallaProductos extends javax.swing.JDialog implements ActionList
 
     private void exportarProductos() {
         try {
-            Conexion con = new Conexion();
-            Connection conn = (Connection) con.getConection();
+            try {
+                conn = DriverManager.getConnection("jdbc:mysql://localhost/db_colmado", "root", "");
+            } catch (SQLException ex) {
+                Logger.getLogger(PantallaProductos.class.getName()).log(Level.SEVERE, null, ex);
+            }
             String nombreReporte = "productos_1.jasper";
             String path = "src/reportes/" + nombreReporte;
             JasperReport reporte = null;

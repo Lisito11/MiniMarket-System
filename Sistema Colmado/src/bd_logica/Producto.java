@@ -8,7 +8,7 @@ import java.sql.SQLException;
  *
  * @author Lisito
  */
-public class Producto extends Consultas {
+public class Producto extends Conexion {
 
     private String id_producto;
     private String nombre;
@@ -109,33 +109,7 @@ public class Producto extends Consultas {
 
     }
 
-    @Override
-    public boolean Editar() {
-        sql = "UPDATE producto SET id_producto= ?, nombre = ?, precioVenta = ?, precioCompra= ?, cantidad = ?, idcategoria = ?, idproveedor = ? where id = ?";
-        try {
-            ps = (PreparedStatement) conexion.prepareStatement(sql);
-            /* ps.setString(1, "ct01");
-            ps.setString(2, "coctel");
-            ps.setDouble(3, 50.0);
-            ps.setDouble(4, 15);
-            ps.setInt(5, 10);
-            ps.setString(6, "");
-            ps.setString(7, "");
-            ps.execute();
-            System.err.println("Producto Agregado");*/
-            return true;
-
-        } catch (SQLException e) {
-            System.out.println(e);
-            return false;
-        } finally {
-            try {
-                conexion.close();
-            } catch (SQLException e) {
-                System.err.println(e);
-            }
-        }
-    }
+    
 
     public ResultSet getTable(String consulta) {
         ResultSet datos = null;

@@ -133,7 +133,7 @@ public class FormDetalleVenta extends javax.swing.JDialog {
         dv.setIdVenta(Integer.parseInt(idVenta));
         dv.setCantidad(Integer.parseInt(cantidad));
         dv.setFechaProducto(hora);
-        dv.Agregar(dv);
+        dv.Agregar();
 
         System.out.println(idproducto);
         System.out.println(hora);

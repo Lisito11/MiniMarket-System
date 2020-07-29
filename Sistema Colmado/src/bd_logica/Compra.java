@@ -8,7 +8,8 @@ import java.sql.SQLException;
  *
  * @author Lisito
  */
-public class Compra extends Consultas{
+public class Compra extends Conexion {
+
     private int idCompra;
     private String fechaCompra;
     private String proveedor;
@@ -36,42 +37,38 @@ public class Compra extends Consultas{
     public void setProveedor(String proveedor) {
         this.proveedor = proveedor;
     }
-    
+
     public ResultSet getTable(String consulta) {
         ResultSet datos = null;
         try {
             ps = (PreparedStatement) conexion.prepareStatement(consulta);
             datos = ps.executeQuery();
-            System.out.println("CONSULTA EXITOSA");
         } catch (SQLException e) {
             System.out.println(e);
         }
         return datos;
 
     }
-    
-    public ResultSet getProveedores(){
+
+    public ResultSet getProveedores() {
         ResultSet datos = null;
         try {
             ps = (PreparedStatement) conexion.prepareStatement("select nombreEmpresa, id_proveedor from proveedor");
             datos = ps.executeQuery();
-            System.out.println("CONSULTA EXITOSA");
-            System.out.println();
         } catch (SQLException e) {
             System.out.println(e);
         }
         return datos;
 
     }
-    
+
     public boolean PagarFacturaCredito(String pago) {
         sql = "UPDATE compra set Por_pagar = Por_pagar - ? where id_compra = ?";
         try {
             ps = (PreparedStatement) conexion.prepareStatement(sql);
-            ps.setDouble(1,Double.parseDouble(pago));
+            ps.setDouble(1, Double.parseDouble(pago));
             ps.setInt(2, getIdCompra());
             ps.execute();
-            System.out.println("Compra finalizada Credito");
             return true;
 
         } catch (SQLException e) {
@@ -89,18 +86,13 @@ public class Compra extends Consultas{
             ps.setString(2, getProveedor());
             ps.setString(3, getFechaCompra());
             ps.execute();
-            System.out.println("Compra Agregada");
             return true;
 
         } catch (SQLException e) {
             System.err.println(e);
             return false;
-        } 
+        }
     }
-    
 
-    @Override
-    public boolean Editar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+   
 }

@@ -4,13 +4,12 @@ package vista.ventas;
  *
  * @author Lisito
  */
-import bd_logica.Conexion;
 import bd_logica.DetalleVenta;
 import bd_logica.Venta;
-import com.mysql.jdbc.Connection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -44,7 +43,7 @@ public class PantallaVentas extends javax.swing.JDialog implements ActionListene
     private ArrayList<String> total_vendido;
     private ArrayList<String> cantidad_vendida;
     private ArrayList<String> producto;
-
+    private java.sql.Connection conn;
     public static String idVenta = "";
     private javax.swing.JLabel backgroud;
     public javax.swing.JButton btn_agregarVenta;
@@ -369,8 +368,11 @@ public class PantallaVentas extends javax.swing.JDialog implements ActionListene
     // Metodo - Auxiliar exportar venta
     private void exportarVenta(String idventa) {
         try {
-            Conexion con = new Conexion();
-            Connection conn = (Connection) con.getConection();
+            try {
+                conn = DriverManager.getConnection("jdbc:mysql://localhost/db_colmado", "root", "");
+            } catch (SQLException ex) {
+                Logger.getLogger(PantallaVentas.class.getName()).log(Level.SEVERE, null, ex);
+            }
             String nombreReporte = "venta.jasper";
             String path = "src/reportes/" + nombreReporte;
             JasperReport reporte = null;
@@ -410,8 +412,11 @@ public class PantallaVentas extends javax.swing.JDialog implements ActionListene
     // Metodo - Auxiliar exportar todas las venta
     private void exportarAllVentas() {
         try {
-            Conexion con = new Conexion();
-            Connection conn = (Connection) con.getConection();
+            try {
+                conn = DriverManager.getConnection("jdbc:mysql://localhost/db_colmado", "root", "");
+            } catch (SQLException ex) {
+                Logger.getLogger(PantallaVentas.class.getName()).log(Level.SEVERE, null, ex);
+            }
             String nombreReporte = "allVentas.jasper";
             String path = "src/reportes/" + nombreReporte;
             JasperReport reporte = null;

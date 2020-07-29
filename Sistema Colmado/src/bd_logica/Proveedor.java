@@ -7,7 +7,7 @@ import java.sql.SQLException;
  *
  * @author Lisito
  */
-public class Proveedor extends Consultas {
+public class Proveedor extends Conexion {
 
     private String idProveedor;
     private String nombreEmpresa;
@@ -87,9 +87,6 @@ public class Proveedor extends Consultas {
 
     }
 
-    @Override
-    public boolean Editar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    
 
 }

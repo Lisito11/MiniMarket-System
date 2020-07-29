@@ -95,7 +95,7 @@ public class PantallaPrincipal extends javax.swing.JFrame implements ActionListe
         btn_entrarCompras.setText("Entrar");
         btn_entrarCompras.setBorderPainted(false);
         btn_entrarCompras.setFocusPainted(false);
-        btn_entrarCompras.addActionListener(this::btn_entrarComprasActionPerformed);
+        btn_entrarCompras.addActionListener(this::btn_entrarCompras);
         jPanel1.add(btn_entrarCompras, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 320, 210, 80));
 
         fondo_compras.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/tarjetas_img.jpg"))); // NOI18N
@@ -118,7 +118,7 @@ public class PantallaPrincipal extends javax.swing.JFrame implements ActionListe
         btn_entrarProductos.setForeground(new java.awt.Color(255, 255, 255));
         btn_entrarProductos.setText("Entrar");
         btn_entrarProductos.setFocusPainted(false);
-        btn_entrarProductos.addActionListener(this::btn_entrarProductosActionPerformed);
+        btn_entrarProductos.addActionListener(this::btn_entrarProductos);
         jPanel2.add(btn_entrarProductos, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 320, 210, 80));
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/tarjetas_img.jpg"))); // NOI18N
@@ -140,7 +140,7 @@ public class PantallaPrincipal extends javax.swing.JFrame implements ActionListe
         btn_entrarVentas.setFont(new java.awt.Font("Verdana", 1, 36)); // NOI18N
         btn_entrarVentas.setForeground(new java.awt.Color(255, 255, 255));
         btn_entrarVentas.setText("Entrar");
-        btn_entrarVentas.addActionListener(this::btn_entrarVentasActionPerformed);
+        btn_entrarVentas.addActionListener(this::btn_entrarVentas);
         jPanel3.add(btn_entrarVentas, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 320, 210, 80));
 
         fondo_facturasv.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/tarjetas_img.jpg"))); // NOI18N
@@ -159,7 +159,7 @@ public class PantallaPrincipal extends javax.swing.JFrame implements ActionListe
         btn_agregarProovedor.setForeground(new java.awt.Color(255, 255, 255));
         btn_agregarProovedor.setText("Agregar Proveedor");
         btn_agregarProovedor.setFocusPainted(false);
-        btn_agregarProovedor.addActionListener(this::btn_agregarProovedorActionPerformed);
+        btn_agregarProovedor.addActionListener(this::btn_agregarProovedor);
         getContentPane().add(btn_agregarProovedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 20, 190, 40));
 
         btn_agregarUsuario.setBackground(new java.awt.Color(255, 51, 0));
@@ -167,7 +167,7 @@ public class PantallaPrincipal extends javax.swing.JFrame implements ActionListe
         btn_agregarUsuario.setForeground(new java.awt.Color(255, 255, 255));
         btn_agregarUsuario.setText("Agregar Usuario");
         btn_agregarUsuario.setFocusPainted(false);
-        btn_agregarUsuario.addActionListener(this::btn_agregarUsuarioActionPerformed);
+        btn_agregarUsuario.addActionListener(this::btn_agregarUsuario);
         getContentPane().add(btn_agregarUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 20, 190, 40));
 
         autor.setForeground(new java.awt.Color(204, 204, 204));
@@ -235,29 +235,29 @@ public class PantallaPrincipal extends javax.swing.JFrame implements ActionListe
         pack();
     }
 
-    private void btn_entrarProductosActionPerformed(java.awt.event.ActionEvent evt) {
+    private void btn_entrarProductos(java.awt.event.ActionEvent evt) {
         PantallaProductos pp = new PantallaProductos(new PantallaPrincipal(), false);
         pp.setVisible(true);
     }
 
-    private void btn_entrarComprasActionPerformed(java.awt.event.ActionEvent evt) {
+    private void btn_entrarCompras(java.awt.event.ActionEvent evt) {
         PantallaCompras pc = new PantallaCompras(new PantallaPrincipal(), false);
         pc.setVisible(true);
     }
 
-    private void btn_entrarVentasActionPerformed(java.awt.event.ActionEvent evt) {
+    private void btn_entrarVentas(java.awt.event.ActionEvent evt) {
         PantallaVentas pv = new PantallaVentas(new PantallaPrincipal(), false);
         pv.setVisible(true);
 
     }
 
-    private void btn_agregarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//EN-FIR:event_btn_agregarUsuarioActionPerformed
+    private void btn_agregarUsuario(java.awt.event.ActionEvent evt) {//EN-FIR:event_btn_agregarUsuarioActionPerformed
         AgregarUsuario au = new AgregarUsuario(new PantallaPrincipal(), true);
         au.setVisible(true);
 
     }
 
-    private void btn_agregarProovedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIT:event_btn_agregarProovedorActionPerformed
+    private void btn_agregarProovedor(java.awt.event.ActionEvent evt) {//GEN-FIT:event_btn_agregarProovedorActionPerformed
         AgregarProveedor ap = new AgregarProveedor(new PantallaPrincipal(), true);
         ap.setVisible(true);
     }
@@ -314,7 +314,7 @@ public class PantallaPrincipal extends javax.swing.JFrame implements ActionListe
     private javax.swing.JPanel jPanel4;
     private javax.swing.JMenuItem sistema;
 
-    String nombre = Login.texto;
+    String nombre = Login.usuario;
     ImageIcon icono_principal;
     private ImageIcon img, img2, img3;
     private Icon icono, icono2, icono3;

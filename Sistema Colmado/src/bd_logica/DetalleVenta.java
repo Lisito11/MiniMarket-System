@@ -3,9 +3,8 @@ package bd_logica;
 import com.mysql.jdbc.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalTime;
 
-public class DetalleVenta extends Consultas {
+public class DetalleVenta extends Conexion {
 
     private int idVenta;
     private String idProducto;
@@ -42,24 +41,6 @@ public class DetalleVenta extends Consultas {
 
     public void setCantidad(int cantidad) {
         this.cantidad = cantidad;
-    }
-
-    public boolean Agregar(DetalleVenta dv) {
-        sql = "INSERT INTO detalle_venta(id_venta,id_producto,cantidad,hora_producto) values(?,?,?,?)";
-        try {
-            ps = (PreparedStatement) conexion.prepareStatement(sql);
-            ps.setInt(1, dv.getIdVenta());
-            ps.setString(2, dv.getIdProducto());
-            ps.setInt(3, dv.getCantidad());
-            ps.setString(4, dv.getFechaProducto());
-            ps.execute();
-            System.out.println("Producto agregado");
-            return true;
-
-        } catch (SQLException e) {
-            System.err.println(e);
-            return false;
-        }
     }
 
     public boolean Eliminar(String nombre, int cnt, String hora, String iddVenta) {
@@ -203,7 +184,7 @@ public class DetalleVenta extends Consultas {
     public boolean editarFacturaAñadirProducto(String idproducto, String cantidad, String hora, String idVenta) {
         sql = "call proc_ActualizarProducto(?,?,?,?)";
         try {
-            
+
             ps = (PreparedStatement) conexion.prepareStatement(sql);
             ps.setString(1, idproducto);
             ps.setInt(2, Integer.parseInt(cantidad));
@@ -231,14 +212,13 @@ public class DetalleVenta extends Consultas {
             rs = ps.executeQuery();
 
             return rs.next();
-            
+
         } catch (SQLException e) {
             System.err.println(e);
             return false;
         }
     }
-    
-    
+
     public boolean editarFacturaEliminarProducto(String nombre, int cnt, String hora, String IdVenta) {
         sql = "call proc_EliminarProducto(?,?,?,?)";
         try {
@@ -256,8 +236,7 @@ public class DetalleVenta extends Consultas {
             return false;
         }
     }
-    
-    
+
     public ResultSet TopProductos() {
         ResultSet datos = null;
         try {
@@ -269,19 +248,25 @@ public class DetalleVenta extends Consultas {
             System.out.println(e);
         }
         return datos;
-    } 
-    
-    
-    
-    
-    @Override
-    public boolean Agregar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public boolean Editar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean Agregar() {
+        sql = "INSERT INTO detalle_venta(id_venta,id_producto,cantidad,hora_producto) values(?,?,?,?)";
+        try {
+            ps = (PreparedStatement) conexion.prepareStatement(sql);
+            ps.setInt(1, getIdVenta());
+            ps.setString(2, getIdProducto());
+            ps.setInt(3, getCantidad());
+            ps.setString(4, getFechaProducto());
+            ps.execute();
+            System.out.println("Producto agregado");
+            return true;
+
+        } catch (SQLException e) {
+            System.err.println(e);
+            return false;
+        }
     }
 
 }

@@ -1,4 +1,4 @@
-package bd_logica;
+ package bd_logica;
 
 import com.mysql.jdbc.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,7 +8,7 @@ import java.sql.SQLException;
  *
  * @author Lisito
  */
-public class Venta extends Consultas {
+public class Venta extends Conexion {
 
     private int idVenta;
     private String idAdministrador;
@@ -65,13 +65,14 @@ public class Venta extends Consultas {
         this.gananciaVenta = gananciaVenta;
     }
 
-    public boolean AgregarVenta(Venta newVenta) {
+    @Override
+    public boolean Agregar() {
         sql = "INSERT INTO venta(id_venta,id_administrador,fecha_venta) values(?,?,?)";
         try {
             ps = (PreparedStatement) conexion.prepareStatement(sql);
-            ps.setInt(1, newVenta.getIdVenta());
-            ps.setString(2, newVenta.getIdAdministrador());
-            ps.setString(3, newVenta.getFechaVenta());
+            ps.setInt(1, getIdVenta());
+            ps.setString(2, getIdAdministrador());
+            ps.setString(3, getFechaVenta());
             ps.execute();
             System.out.println("Venta Agregada");
             return true;
@@ -79,13 +80,7 @@ public class Venta extends Consultas {
         } catch (SQLException e) {
             System.err.println(e);
             return false;
-        } 
-    }
-
-    @Override
-    public boolean Agregar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-
+        }
     }
 
     public ResultSet getTable(String consulta) {
@@ -100,17 +95,5 @@ public class Venta extends Consultas {
         return datos;
 
     }
-
-    @Override
-    public boolean Editar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-    
-    public void GenerarReporte(){
-    
-    }
-    
-    
 
 }
