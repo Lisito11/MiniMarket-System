@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9fc13192-e0d5-4d32-a3db-9bc343c688dd">
+	<property name="ireport.zoom" value="1.4641000000000008"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true" pdfFontName="Times-Bold"/>
+	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<style name="Row" mode="Transparent">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style backcolor="#E6DAC3"/>
+		</conditionalStyle>
+	</style>
+	<style name="Crosstab Data Text" hAlign="Center"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\NBA\\Desktop\\COLMADO\\MiniMarket-System\\Sistema Colmado\\src\\reportes\\"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select c.id_compra, p.nombreEmpresa, c.total_costo, cast(fecha_compra as Varchar(12)) as fecha, c.Por_pagar from compra c inner join proveedor p on p.id_proveedor = c.id_proveedor where c.Por_pagar is not null]]>
+	</queryString>
+	<field name="id_compra" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nombreEmpresa" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="total_costo" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="fecha" class="java.lang.String"/>
+	<field name="Por_pagar" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<title>
+		<band height="136" splitType="Stretch">
+			<image>
+				<reportElement x="1" y="0" width="208" height="136" uuid="cdf12ea4-cfd7-466f-8638-13d856e9f96f"/>
+				<imageExpression><![CDATA["C:\\Users\\NBA\\Desktop\\COLMADO\\MiniMarket-System\\Sistema Colmado\\src\\imagenes\\logo.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="130" y="96" width="155" height="20" uuid="af8d9556-b400-4ea5-aba3-0dc93f983180"/>
+				<textElement>
+					<font fontName="Verdana" size="12"/>
+				</textElement>
+				<text><![CDATA[Colmado & Cafeteria]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="349" y="96" width="203" height="23" uuid="27a8cd7c-5920-4461-9a12-6e913041fd8a"/>
+				<textElement>
+					<font fontName="Verdana" size="18"/>
+				</textElement>
+				<text><![CDATA[Reporte de Compras]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="130" y="76" width="75" height="20" uuid="f56445e7-17e6-467d-a0f3-b87927f28ee7"/>
+				<textElement>
+					<font fontName="Verdana" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[El Viejillo]]></text>
+			</staticText>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="411" y="23" width="141" height="20" uuid="ed466b54-a642-4226-9f65-4fb8f2017265"/>
+				<textElement>
+					<font fontName="Verdana" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="130" y="116" width="100" height="20" uuid="13cfc10d-d76c-48a7-844e-e80c77763b4c"/>
+				<textElement>
+					<font fontName="Verdana"/>
+				</textElement>
+				<text><![CDATA[809-988-9305]]></text>
+			</staticText>
+			<textField evaluationTime="Report">
+				<reportElement x="512" y="3" width="40" height="20" uuid="f4bc6c1a-b97f-4247-b8b5-f0e6b7c04d0b"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="432" y="3" width="80" height="20" uuid="e2b140a4-b572-40c7-afac-e85241e0ce84"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="1" width="556" height="17" uuid="e8c984bc-630b-4020-9a39-4e762a1f0db0"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement style="Column header" x="1" y="2" width="66" height="15" forecolor="#FF3300" uuid="4fab8648-c1f1-49cb-acf9-09824d1beaf2"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[ID Compra]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="100" y="2" width="90" height="15" forecolor="#FF3300" uuid="85f36e7d-8907-4adb-9506-96f25b363f01"/>
+				<text><![CDATA[Proveedor]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="230" y="2" width="110" height="15" forecolor="#FF3300" uuid="bffe391d-bbae-4fca-b433-39b3d42eace5"/>
+				<text><![CDATA[Costo Compra]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="463" y="2" width="92" height="15" forecolor="#FF0000" uuid="f67d127f-4c9c-4cd6-944d-6e21e1796462"/>
+				<text><![CDATA[Fecha Compra]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="360" y="2" width="110" height="15" forecolor="#FF3300" uuid="cdae97cb-8173-457c-af42-e75c55010b73"/>
+				<text><![CDATA[Por Pagar]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="22" splitType="Stretch">
+			<rectangle>
+				<reportElement style="Detail" mode="Opaque" x="0" y="0" width="555" height="19" forecolor="#FFFFFF" backcolor="#FDF1EB" uuid="74a07869-8802-4ec6-a806-aab59a48f860"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="230" y="2" width="24" height="15" uuid="aa0635cd-4ed8-4711-839f-f64a7b9ac906"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font fontName="Verdana" size="11" isBold="false"/>
+				</textElement>
+				<text><![CDATA[RD$]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="1" y="1" width="76" height="20" uuid="7068e287-7380-4d1d-8278-08e28698d397"/>
+				<textElement>
+					<font fontName="Verdana" size="12" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{id_compra}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="463" y="1" width="100" height="20" uuid="c06c4d58-b0f3-4a24-85e4-119c19f91d48"/>
+				<textElement>
+					<font fontName="Verdana" size="12" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="254" y="1" width="100" height="20" uuid="673d3427-0935-4b1e-803c-1cf5441767da"/>
+				<textElement>
+					<font fontName="Verdana" size="12" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{total_costo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="80" y="1" width="130" height="20" uuid="f5b0da74-9b83-4f76-bf1f-8133c4bdc0f3"/>
+				<textElement>
+					<font fontName="Verdana" size="12" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nombreEmpresa}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="384" y="1" width="100" height="20" uuid="22688323-890b-4262-a78f-a1d971cebd6b"/>
+				<textElement>
+					<font fontName="Verdana" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Por_pagar}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="360" y="2" width="24" height="15" uuid="eb45b0e4-9be0-4b77-95b3-b73da91cf13c"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font fontName="Verdana" size="11" isBold="false"/>
+				</textElement>
+				<text><![CDATA[RD$]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<summary>
+		<band height="58">
+			<subreport>
+				<reportElement x="0" y="0" width="556" height="58" uuid="89c03d60-7efb-4c14-8852-5a6d2395b26f"/>
+				<subreportParameter name="id_ventaa"/>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "total_compra_all__Credito.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</summary>
+</jasperReport>

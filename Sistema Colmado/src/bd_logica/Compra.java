@@ -64,7 +64,21 @@ public class Compra extends Consultas{
 
     }
     
-    
+    public boolean PagarFacturaCredito(String pago) {
+        sql = "UPDATE compra set Por_pagar = Por_pagar - ? where id_compra = ?";
+        try {
+            ps = (PreparedStatement) conexion.prepareStatement(sql);
+            ps.setDouble(1,Double.parseDouble(pago));
+            ps.setInt(2, getIdCompra());
+            ps.execute();
+            System.out.println("Compra finalizada Credito");
+            return true;
+
+        } catch (SQLException e) {
+            System.err.println(e);
+            return false;
+        }
+    }
 
     @Override
     public boolean Agregar() {

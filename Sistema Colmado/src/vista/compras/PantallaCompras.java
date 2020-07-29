@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.YES_NO_OPTION;
@@ -94,7 +96,7 @@ public class PantallaCompras extends javax.swing.JDialog {
             }
         };
 
-        String[] columnNames2 = {"ID Factura", "Proveedor", "Fecha", "Total"};
+        String[] columnNames2 = {"ID Factura", "Proveedor", "Fecha", "Total", "Por Pagar"};
         Object[][] datos2 = {};
         dtm2 = new DefaultTableModel(datos2, columnNames2) {
             @Override
@@ -238,13 +240,14 @@ public class PantallaCompras extends javax.swing.JDialog {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
                 if (e.getClickCount() == 2) {
-                    System.out.println("Se ha hecho doble click");
                     int fila = tabla_facturasContado.getSelectedRow();
                     if (fila >= 0) {
-                        //
-
-                        //pendiente
-                        //
+                        int input = JOptionPane.showConfirmDialog(null, "¿Desea exportar la compra?", "Exportar Comprar", YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                        if (input == 0) {
+                            tabla_facturasContado.getSelectedRow();
+                            String id = String.valueOf(dtm1.getValueAt(tabla_facturasContado.getSelectedRow(), 0));
+                            exportarCompra(id, "compra");
+                        }
                     }
                 }
             }
@@ -291,9 +294,13 @@ public class PantallaCompras extends javax.swing.JDialog {
             tabla_facturasCredito.getColumnModel().getColumn(1).setResizable(false);
             tabla_facturasCredito.getColumnModel().getColumn(2).setResizable(false);
             tabla_facturasCredito.getColumnModel().getColumn(3).setResizable(false);
+            tabla_facturasCredito.getColumnModel().getColumn(4).setResizable(false);
+
         }
         tabla_facturasCredito.getColumnModel().getColumn(0).setPreferredWidth(30);
         tabla_facturasCredito.getColumnModel().getColumn(3).setPreferredWidth(30);
+        tabla_facturasCredito.getColumnModel().getColumn(2).setPreferredWidth(30);
+        tabla_facturasCredito.getColumnModel().getColumn(4).setPreferredWidth(30);
 
         tabla_facturasCredito.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
@@ -302,10 +309,7 @@ public class PantallaCompras extends javax.swing.JDialog {
                     System.out.println("Se ha hecho doble click");
                     int fila = tabla_facturasCredito.getSelectedRow();
                     if (fila >= 0) {
-                        //
-
-                        //pendiente
-                        //
+                        opcionesCompra();
                     }
                 }
             }
@@ -317,6 +321,8 @@ public class PantallaCompras extends javax.swing.JDialog {
         btn_agregarFacturaCredito.setForeground(new java.awt.Color(255, 255, 255));
         btn_agregarFacturaCredito.setText("Agregar Factura");
         btn_agregarFacturaCredito.setFocusPainted(false);
+        btn_agregarFacturaCredito.addActionListener(this::btn_agregarFacturaCredito);
+
         jPanel2.add(btn_agregarFacturaCredito, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 260, 270, -1));
 
         btn_exportarFacturaCredito.setBackground(new java.awt.Color(0, 102, 153));
@@ -324,6 +330,8 @@ public class PantallaCompras extends javax.swing.JDialog {
         btn_exportarFacturaCredito.setForeground(new java.awt.Color(255, 255, 255));
         btn_exportarFacturaCredito.setText("Exportar una Factura");
         btn_exportarFacturaCredito.setFocusPainted(false);
+        btn_exportarFacturaCredito.addActionListener(this::btn_exportarCredito);
+
         jPanel2.add(btn_exportarFacturaCredito, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 260, 280, -1));
 
         btn_buscarFacturasCredito.setBackground(new java.awt.Color(102, 102, 0));
@@ -366,6 +374,7 @@ public class PantallaCompras extends javax.swing.JDialog {
         btn_exportarCredito.setForeground(new java.awt.Color(255, 255, 255));
         btn_exportarCredito.setText("Exportar Facturas");
         btn_exportarCredito.setFocusPainted(false);
+        btn_exportarCredito.addActionListener(this::btn_exportarAllCredito);
         jPanel2.add(btn_exportarCredito, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 260, 200, -1));
 
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/fondo_principal.jpg"))); // NOI18N
@@ -398,12 +407,11 @@ public class PantallaCompras extends javax.swing.JDialog {
         if (fila >= 0) {
             int input = JOptionPane.showConfirmDialog(null, "¿Desea exportar la compra?", "Exportar Comprar", YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             if (input == 0) {
-                tabla_facturasContado.getSelectedRow();
                 String id = String.valueOf(dtm1.getValueAt(tabla_facturasContado.getSelectedRow(), 0));
-                exportarCompra(id);
+                exportarCompra(id, "compra");
             }
         } else {
-            JOptionPane.showMessageDialog(null, "Seleccione una venta para Exportar");
+            JOptionPane.showMessageDialog(null, "Seleccione una Compra para Exportar");
         }
 
     }
@@ -412,7 +420,7 @@ public class PantallaCompras extends javax.swing.JDialog {
     private void btn_exportarAllCompras(ActionEvent e) {
         int input = JOptionPane.showConfirmDialog(null, "¿Desea exportar todas las Compras?", "Exportar Compras", YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         if (input == 0) {
-            exportarAllCompras();
+            exportarAllCompras("allCompras");
         }
     }
 
@@ -436,9 +444,17 @@ public class PantallaCompras extends javax.swing.JDialog {
         }
     }
 
+    private void btn_agregarFacturaCredito(ActionEvent e) {
+        int input = JOptionPane.showConfirmDialog(null, "¿Desea agregar una Factura?", "Agregar Factura", YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (input == 0) {
+            AgregarFactura_Credito af = new AgregarFactura_Credito(new PantallaCompras(), true);
+            af.setVisible(true);
+        }
+    }
+
     private void mostrarCompras1() {
         Compra c = new Compra();
-        ResultSet rs = c.getTable("select c.id_compra, p.nombreEmpresa,c.fecha_compra, c.total_costo from compra c inner join proveedor p on p.id_proveedor = c.id_proveedor");
+        ResultSet rs = c.getTable("select c.id_compra, p.nombreEmpresa,c.fecha_compra, c.total_costo from compra c inner join proveedor p on p.id_proveedor = c.id_proveedor where c.Por_pagar is null");
         try {
             while (rs.next()) {
                 dtm1.addRow(new Object[]{rs.getString("c.id_compra"), rs.getString("p.nombreEmpresa"), rs.getString("c.fecha_compra"), rs.getString("c.total_costo")});
@@ -451,10 +467,10 @@ public class PantallaCompras extends javax.swing.JDialog {
 
     private void mostrarCompras2() {
         Compra c = new Compra();
-        ResultSet rs = c.getTable("select c.id_compra, p.nombreEmpresa,c.fecha_compra, c.total_costo from compra c inner join proveedor p on p.id_proveedor = c.id_proveedor");
+        ResultSet rs = c.getTable("select c.id_compra, p.nombreEmpresa,c.fecha_compra, c.total_costo, c.Por_pagar from compra c inner join proveedor p on p.id_proveedor = c.id_proveedor where c.Por_pagar is not null");
         try {
             while (rs.next()) {
-                dtm2.addRow(new Object[]{rs.getString("c.id_compra"), rs.getString("p.nombreEmpresa"), rs.getString("c.fecha_compra"), rs.getString("c.total_costo")});
+                dtm2.addRow(new Object[]{rs.getString("c.id_compra"), rs.getString("p.nombreEmpresa"), rs.getString("c.fecha_compra"), rs.getString("c.total_costo"), rs.getString("c.Por_pagar")});
             }
         } catch (SQLException e) {
             System.out.println(e);
@@ -467,50 +483,50 @@ public class PantallaCompras extends javax.swing.JDialog {
         // Ordenar por Proveedor
         if (rbton_proveedorContado.isSelected() == true) {
             limpiarTabla(dtm1);
-            filtrarBusqueda("select c.id_compra, p.nombreEmpresa,c.fecha_compra, c.total_costo from compra c inner join proveedor p on p.id_proveedor = c.id_proveedor order by p.nombreEmpresa ASC", dtm1);
+            filtrarBusqueda("select c.id_compra, p.nombreEmpresa,c.fecha_compra, c.total_costo from compra c inner join proveedor p on p.id_proveedor = c.id_proveedor where c.Por_pagar is null order by p.nombreEmpresa ASC ", dtm1);
         }
 
         // Ordenar por Fecha
         if (rbton_fechaContado.isSelected() == true) {
             limpiarTabla(dtm1);
-            filtrarBusqueda("select c.id_compra, p.nombreEmpresa,c.fecha_compra, c.total_costo from compra c inner join proveedor p on p.id_proveedor = c.id_proveedor order by c.fecha_compra ASC", dtm1);
+            filtrarBusqueda("select c.id_compra, p.nombreEmpresa,c.fecha_compra, c.total_costo from compra c inner join proveedor p on p.id_proveedor = c.id_proveedor where c.Por_pagar is null order by c.fecha_compra ASC ", dtm1);
         }
 
         // Ordenar por id
         if (rbton_idContado.isSelected() == true) {
             limpiarTabla(dtm1);
-            filtrarBusqueda("select c.id_compra, p.nombreEmpresa,c.fecha_compra, c.total_costo from compra c inner join proveedor p on p.id_proveedor = c.id_proveedor order by c.id_compra ASC", dtm1);
+            filtrarBusqueda("select c.id_compra, p.nombreEmpresa,c.fecha_compra, c.total_costo from compra c inner join proveedor p on p.id_proveedor = c.id_proveedor where c.Por_pagar is null order by c.id_compra ASC", dtm1);
         }
 
         // Ordenar Costo
         if (rbton_montoContado.isSelected() == true) {
             limpiarTabla(dtm1);
-            filtrarBusqueda("select c.id_compra, p.nombreEmpresa,c.fecha_compra, c.total_costo from compra c inner join proveedor p on p.id_proveedor = c.id_proveedor order by c.total_costo DESC", dtm1);
+            filtrarBusqueda("select c.id_compra, p.nombreEmpresa,c.fecha_compra, c.total_costo from compra c inner join proveedor p on p.id_proveedor = c.id_proveedor where c.Por_pagar is null order by c.total_costo DESC", dtm1);
         }
 
         //Facturas a credito
         // Ordenar por Proveedor
         if (rbton_proveedorCredito.isSelected() == true) {
             limpiarTabla(dtm2);
-            filtrarBusqueda("select c.id_compra, p.nombreEmpresa,c.fecha_compra, c.total_costo from compra c inner join proveedor p on p.id_proveedor = c.id_proveedor order by p.nombreEmpresa ASC", dtm2);
+            filtrarBusqueda("select c.id_compra, p.nombreEmpresa,c.fecha_compra, c.total_costo, c.Por_pagar from compra c inner join proveedor p on p.id_proveedor = c.id_proveedor where c.Por_pagar is not null order by p.nombreEmpresa ASC ", dtm2);
         }
 
         // Ordenar por Fecha
         if (rbton_fechaCredito.isSelected() == true) {
             limpiarTabla(dtm2);
-            filtrarBusqueda("select c.id_compra, p.nombreEmpresa,c.fecha_compra, c.total_costo from compra c inner join proveedor p on p.id_proveedor = c.id_proveedor order by c.fecha_compra ASC", dtm2);
+            filtrarBusqueda("select c.id_compra, p.nombreEmpresa,c.fecha_compra, c.total_costo, c.Por_pagar from compra c inner join proveedor p on p.id_proveedor = c.id_proveedor where c.Por_pagar is not null order by c.fecha_compra ASC", dtm2);
         }
 
         // Ordenar por id
         if (rbton_idCredito.isSelected() == true) {
             limpiarTabla(dtm2);
-            filtrarBusqueda("select c.id_compra, p.nombreEmpresa,c.fecha_compra, c.total_costo from compra c inner join proveedor p on p.id_proveedor = c.id_proveedor order by c.id_compra ASC", dtm2);
+            filtrarBusqueda("select c.id_compra, p.nombreEmpresa,c.fecha_compra, c.total_costo, c.Por_pagar from compra c inner join proveedor p on p.id_proveedor = c.id_proveedor where c.Por_pagar is not null order by c.id_compra ASC", dtm2);
         }
 
         // Ordenar Costo
         if (rbton_montoCredito.isSelected() == true) {
             limpiarTabla(dtm2);
-            filtrarBusqueda("select c.id_compra, p.nombreEmpresa,c.fecha_compra, c.total_costo from compra c inner join proveedor p on p.id_proveedor = c.id_proveedor order by c.total_costo DESC", dtm2);
+            filtrarBusqueda("select c.id_compra, p.nombreEmpresa,c.fecha_compra, c.total_costo, c.Por_pagar from compra c inner join proveedor p on p.id_proveedor = c.id_proveedor where c.Por_pagar is not null order by c.total_costo DESC ", dtm2);
         }
     }
 
@@ -519,7 +535,12 @@ public class PantallaCompras extends javax.swing.JDialog {
         ResultSet rs = v.getTable(filtro);
         try {
             while (rs.next()) {
-                dtm.addRow(new Object[]{rs.getString("c.id_compra"), rs.getString("p.nombreEmpresa"), rs.getString("c.fecha_compra"), rs.getString("c.total_costo")});
+                if (dtm == dtm2) {
+                    dtm.addRow(new Object[]{rs.getString("c.id_compra"), rs.getString("p.nombreEmpresa"), rs.getString("c.fecha_compra"), rs.getString("c.total_costo"), rs.getString("c.Por_pagar")});
+
+                } else {
+                    dtm.addRow(new Object[]{rs.getString("c.id_compra"), rs.getString("p.nombreEmpresa"), rs.getString("c.fecha_compra"), rs.getString("c.total_costo")});
+                }
             }
         } catch (SQLException c) {
         }
@@ -564,13 +585,12 @@ public class PantallaCompras extends javax.swing.JDialog {
             }
         }
     }
-// Metodo - Auxiliar exportar todas las compras
 
-    private void exportarAllCompras() {
+    private void exportarAllCompras(String factura) {
         try {
             Conexion con = new Conexion();
             Connection conn = (Connection) con.getConection();
-            String nombreReporte = "allCompras.jasper";
+            String nombreReporte = factura + ".jasper";
             String path = "src/reportes/" + nombreReporte;
             JasperReport reporte = null;
             reporte = (JasperReport) JRLoader.loadObjectFromFile(path);
@@ -585,11 +605,11 @@ public class PantallaCompras extends javax.swing.JDialog {
         }
     }
 
-    private void exportarCompra(String idCompra) {
+    private void exportarCompra(String idCompra, String factura) {
         try {
             Conexion con = new Conexion();
             Connection conn = (Connection) con.getConection();
-            String nombreReporte = "compra.jasper";
+            String nombreReporte = factura + ".jasper";
             String path = "src/reportes/" + nombreReporte;
             JasperReport reporte = null;
             Map parametro = new HashMap();
@@ -602,6 +622,90 @@ public class PantallaCompras extends javax.swing.JDialog {
 
         } catch (JRException ex) {
             Logger.getLogger(PantallaCompras.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void opcionesCompra() {
+        String[] opciones = {"Ver", "Pagar"};
+        int op = JOptionPane.showOptionDialog(
+                null //componente
+                ,
+                 "¿Que quieres hacer con la Factura?" // Mensaje
+                ,
+                 "Compra" // Titulo en la barra del cuadro
+                ,
+                 JOptionPane.DEFAULT_OPTION // Tipo de opciones
+                ,
+                 JOptionPane.INFORMATION_MESSAGE // Tipo de mensaje (icono)
+                ,
+                 null // Icono (ninguno)
+                ,
+                 opciones // Opciones personalizadas
+                ,
+                 null // Opcion por defecto
+        );
+
+        String opcion = opciones[op];
+        switch (opcion) {
+            case "Ver":
+                verCompra();
+                break;
+            case "Pagar":
+                pagarCompra();
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void verCompra() {
+        String id = String.valueOf(dtm2.getValueAt(tabla_facturasCredito.getSelectedRow(), 0));
+        exportarCompra(id, "compraCredito");
+    }
+
+    private void pagarCompra() {
+        Compra c = new Compra();
+        String id = String.valueOf(dtm2.getValueAt(tabla_facturasCredito.getSelectedRow(), 0));
+        c.setIdCompra(Integer.parseInt(id));
+        String porPagar = String.valueOf(dtm2.getValueAt(tabla_facturasCredito.getSelectedRow(), 4));
+        String pago = JOptionPane.showInputDialog(null, "Pagar la Cuenta", porPagar);
+        
+        while (pago.equals("") || !isDecimal(pago) || Double.parseDouble(pago) > Double.parseDouble(porPagar) || Double.parseDouble(pago) < 0) {
+            JOptionPane.showMessageDialog(null, "Introduce un pago correcto");
+            pago = JOptionPane.showInputDialog("Pagar: " + porPagar, porPagar);
+        }
+        int input = JOptionPane.showConfirmDialog(null, "¿Desea Realizar el pago?", "Pagar Factura", YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (input == 0) {
+            c.PagarFacturaCredito(pago);
+        }
+    }
+    
+    private static boolean isDecimal(String cadena) {
+        String patron = "^[0-9]+([.][0-9]+)?$";
+        Pattern pat = Pattern.compile(patron);
+        Matcher mat = pat.matcher(cadena);
+
+        return mat.matches();
+
+    }
+
+    private void btn_exportarAllCredito(ActionEvent e) {
+        int input = JOptionPane.showConfirmDialog(null, "¿Desea exportar todas las Compras?", "Exportar Compras", YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (input == 0) {
+            exportarAllCompras("compraAllCredito");
+        }
+    }
+
+    private void btn_exportarCredito(ActionEvent e) {
+        int fila = tabla_facturasCredito.getSelectedRow();
+        if (fila >= 0) {
+            int input = JOptionPane.showConfirmDialog(null, "¿Desea exportar la compra?", "Exportar Comprar", YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if (input == 0) {
+                String id = String.valueOf(dtm2.getValueAt(tabla_facturasCredito.getSelectedRow(), 0));
+                exportarCompra(id, "compraCredito");
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Seleccione una Compra para Exportar");
         }
     }
 

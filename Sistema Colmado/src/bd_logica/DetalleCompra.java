@@ -82,6 +82,40 @@ public class DetalleCompra extends Consultas {
 
     }
 
+    public ResultSet getTotalCompra() {
+        ResultSet datos = null;
+        try {
+            ps = (PreparedStatement) conexion.prepareStatement("select sum(costoUnidad * Cantidad) as total from detalle_compra WHERE id_compra = ?");
+            ps.setInt(1, getIdCompra());
+            datos = ps.executeQuery();
+            return datos;
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return datos;
+
+    }
+
+    public boolean FinalizarCompraCredito(String porpagar) {
+        sql = "UPDATE compra set Por_pagar = ? where id_compra = ?";
+        try {
+            ps = (PreparedStatement) conexion.prepareStatement(sql);
+            ps.setDouble(1,Double.parseDouble(porpagar));
+            ps.setInt(2, getIdCompra());
+            ps.execute();
+            System.out.println("Compra finalizada Credito");
+            return true;
+
+        } catch (SQLException e) {
+            System.err.println(e);
+            return false;
+        }
+    }
+    
+    
+    
+     
+
     public boolean Eliminar(String idproducto, String cantidad, String costoUnidad, String idCompra) {
         sql = "delete from detalle_compra where id_producto = ?  and cantidad = ? and costoUnidad = ? and id_compra = ?";
         try {
